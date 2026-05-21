@@ -38,7 +38,7 @@
   .preview-wrapper { background:white; border-radius:10px; box-shadow:0 1px 4px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04); margin-bottom:18px; }
   .preview-topbar { background:#f3f4f6; padding:8px 16px; font-size:12px; color:#6b7280; border-bottom:1px solid #e5e7eb; border-radius:10px 10px 0 0; }
   .preview-topbar::before { content:'✦ '; font-size:10px; color:#9ca3af; }
-  .preview-body { padding:24px 28px; }
+  .preview-body { padding:24px 28px; overflow-x:auto; }
   .preview-body > div { width:100%; box-sizing:border-box; }
   .copy-section { display:flex; gap:10px; margin-top:4px; }
   .btn-copy { flex:1; padding:10px 16px; border-radius:7px; font-size:13px; font-weight:600; cursor:pointer; border:1.5px solid; display:flex; align-items:center; justify-content:center; gap:7px; }
@@ -96,6 +96,16 @@
     .copy-section { flex-direction:column; }
     .preview-body { padding:14px 12px; }
     .instructions { font-size:11px; }
+  }
+  @media (max-width:480px) {
+    .app-header h1 { font-size:14px; }
+    .right-panel { padding:12px 10px; }
+    .preview-body { padding:10px 8px; }
+    .style-switcher { gap:5px; }
+    .style-btn { padding:7px 4px 8px; }
+    .style-btn .style-name { font-size:10px; }
+    .style-btn .style-desc { display:none; }
+    .preview-topbar { padding:8px 10px; font-size:11px; }
   }
 </style>
 </head>
@@ -378,16 +388,16 @@ function buildClassic(name, titleV, phone, email, website, address, products, sh
     : `<span style="font-family:Arial,sans-serif;font-size:20px;font-weight:900;color:#1E5FA8;">PIRANUSA</span>`;
 
   const contactRows = [
-    phone   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_PHONE)}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${phone}</span></td></tr></table></td></tr>` : '',
-    email   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_MAIL)}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${email}</span></td></tr></table></td></tr>` : '',
-    website ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_WEB)}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${website}</span></td></tr></table></td></tr>` : '',
-    address ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:top;padding-top:2px;width:22px;text-align:center;">${iconImg(ICON_LOC,'top')}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${address}</span></td></tr></table></td></tr>` : '',
+    phone   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_PHONE)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${phone}</span></td></tr></table></td></tr>` : '',
+    email   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_MAIL)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${email}</span></td></tr></table></td></tr>` : '',
+    website ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_WEB)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${website}</span></td></tr></table></td></tr>` : '',
+    address ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:top;padding-top:2px;width:22px;text-align:center;">${iconImg(ICON_LOC,'top')}</td><td style="word-break:break-word;overflow-wrap:break-word;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${address}</span></td></tr></table></td></tr>` : '',
   ].filter(Boolean).join('');
 
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
     if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 12px 8px 0;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#1E5FA8;border:1.5px solid #1E5FA8;padding:3px 7px;border-radius:3px;white-space:nowrap;">${p.label}</span>`;
-    return `<span style="display:inline-flex;align-items:center;margin:0 12px 8px 0;"><img src="${src}" alt="${p.label}" height="22" style="display:block;height:22px;width:auto;border:0;outline:none;"></span>`;
+    return `<span style="display:inline-flex;align-items:center;margin:0 12px 8px 0;"><img src="${src}" alt="${p.label}" height="22" style="display:block;height:22px;width:auto;max-width:100%;border:0;outline:none;"></span>`;
   }).join('');
 
   const logoStrip = productCount > 0 ? `<div style="display:flex;flex-wrap:wrap;align-items:center;padding-top:12px;margin-top:2px;border-top:1px solid #f0f4f8;margin-bottom:-8px;">${logoItems}</div>` : '';
@@ -424,16 +434,16 @@ function buildExecutive(name, titleV, phone, email, website, address, products, 
     : `<span style="font-family:Arial,sans-serif;font-size:18px;font-weight:900;color:white;">PIRANUSA</span>`;
 
   const contactRows = [
-    phone   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_PHONE)}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${phone}</span></td></tr></table></td></tr>` : '',
-    email   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_MAIL)}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${email}</span></td></tr></table></td></tr>` : '',
-    website ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_WEB)}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${website}</span></td></tr></table></td></tr>` : '',
-    address ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:top;padding-top:2px;width:22px;text-align:center;">${iconImg(ICON_LOC,'top')}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${address}</span></td></tr></table></td></tr>` : '',
+    phone   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_PHONE)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${phone}</span></td></tr></table></td></tr>` : '',
+    email   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_MAIL)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${email}</span></td></tr></table></td></tr>` : '',
+    website ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_WEB)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${website}</span></td></tr></table></td></tr>` : '',
+    address ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:top;padding-top:2px;width:22px;text-align:center;">${iconImg(ICON_LOC,'top')}</td><td style="word-break:break-word;overflow-wrap:break-word;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${address}</span></td></tr></table></td></tr>` : '',
   ].filter(Boolean).join('');
 
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
     if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;font-family:Arial,sans-serif;font-size:9px;font-weight:700;color:#1E5FA8;border:1px solid #bfdbfe;padding:2px 7px;border-radius:3px;white-space:nowrap;background:#eff6ff;">${p.label}</span>`;
-    return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;"><img src="${src}" alt="${p.label}" height="20" style="display:block;height:20px;width:auto;border:0;outline:none;"></span>`;
+    return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;"><img src="${src}" alt="${p.label}" height="20" style="display:block;height:20px;width:auto;max-width:100%;border:0;outline:none;"></span>`;
   }).join('');
 
   const logoStrip = productCount > 0
