@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Piranusa Email Signature Generator</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',Arial,sans-serif; background:#f5f5f5; min-height:100vh; }
+  .app-header { background:#1a1a2e; color:white; padding:20px 30px; }
+  .app-header h1 { font-size:20px; font-weight:600; }
+  .app-header p { font-size:13px; opacity:0.7; margin-top:2px; }
+  .container { display:flex; min-height:calc(100vh - 72px); }
+  .left-panel { width:360px; min-width:360px; background:white; padding:28px 24px; border-right:1px solid #e5e7eb; overflow-y:auto; }
+  .right-panel { flex:1; padding:28px 32px; background:#f5f5f5; }
+  .section-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af; margin-bottom:14px; margin-top:24px; }
+  .section-title:first-child { margin-top:0; }
+  .form-group { margin-bottom:14px; }
+  .form-group label { display:block; font-size:13px; color:#374151; font-weight:500; margin-bottom:5px; }
+  .form-group input { width:100%; padding:8px 12px; border:1px solid #d1d5db; border-radius:6px; font-size:13px; color:#111827; outline:none; }
+  .form-group input:focus { border-color:#1e5fa8; box-shadow:0 0 0 3px rgba(30,95,168,0.1); }
+  .products-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+  .product-card { display:flex; align-items:center; border:1px solid #e5e7eb; border-radius:6px; font-size:12px; color:#374151; user-select:none; min-height:36px; background:white; transition:box-shadow 0.15s, border-color 0.15s; }
+  .product-card:hover { border-color:#1e5fa8; background:#f0f7ff; }
+  .product-card.drag-over { border-color:#1e5fa8; border-style:dashed; background:#e8f1fb; box-shadow:0 0 0 2px rgba(30,95,168,0.15); }
+  .product-card.dragging { opacity:0.4; border-style:dashed; }
+  .drag-handle { display:flex; align-items:center; justify-content:center; width:22px; min-width:22px; height:100%; min-height:36px; cursor:grab; color:#c4cdd6; padding-left:6px; flex-shrink:0; }
+  .drag-handle:active { cursor:grabbing; }
+  .drag-handle svg { display:block; }
+  .product-toggle { display:flex; align-items:center; gap:7px; padding:7px 8px 7px 4px; cursor:pointer; flex:1; min-width:0; }
+  .product-toggle input { display:none; }
+  .product-toggle .check { width:15px; height:15px; border:1.5px solid #d1d5db; border-radius:3px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:10px; color:transparent; }
+  .product-toggle input:checked + .check { background:#1e5fa8; border-color:#1e5fa8; color:white; }
+  .product-logo-preview { height:18px; width:auto; vertical-align:middle; max-width:60px; object-fit:contain; }
+  .btn-generate { width:100%; padding:11px; background:#1e5fa8; color:white; border:none; border-radius:7px; font-size:14px; font-weight:600; cursor:pointer; margin-top:22px; }
+  .btn-generate:hover { background:#1a529d; }
+  .preview-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af; margin-bottom:14px; }
+  .preview-wrapper { background:white; border-radius:10px; box-shadow:0 1px 4px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04); margin-bottom:18px; }
+  .preview-topbar { background:#f3f4f6; padding:8px 16px; font-size:12px; color:#6b7280; border-bottom:1px solid #e5e7eb; border-radius:10px 10px 0 0; }
+  .preview-topbar::before { content:'✦ '; font-size:10px; color:#9ca3af; }
+  .preview-body { padding:24px 28px; }
+  .preview-body > div { width:100%; box-sizing:border-box; }
+  .copy-section { display:flex; gap:10px; margin-top:4px; }
+  .btn-copy { flex:1; padding:10px 16px; border-radius:7px; font-size:13px; font-weight:600; cursor:pointer; border:1.5px solid; display:flex; align-items:center; justify-content:center; gap:7px; }
+  .btn-copy-html { background:#1e5fa8; color:white; border-color:#1e5fa8; }
+  .btn-copy-html:hover { background:#1a529d; }
+  .instructions { background:#fffbeb; border:1px solid #fcd34d; border-radius:7px; padding:13px 16px; margin-top:14px; font-size:12px; color:#92400e; line-height:1.6; }
+  .instructions strong { color:#78350f; }
+  .style-switcher { display:flex; gap:8px; margin-bottom:20px; }
+  .style-btn { flex:1; padding:9px 6px 10px; border:1.5px solid #e5e7eb; border-radius:8px; background:white; cursor:pointer; text-align:center; transition:all 0.15s; }
+  .style-btn:hover { border-color:#1e5fa8; background:#f0f7ff; }
+  .style-btn.active { border-color:#1e5fa8; background:#1e5fa8; }
+  .style-btn .style-name { font-size:11px; font-weight:700; display:block; margin-bottom:2px; color:#374151; }
+  .style-btn.active .style-name { color:white; }
+  .style-btn .style-desc { font-size:10px; color:#9ca3af; display:block; line-height:1.3; }
+  .style-btn.active .style-desc { color:rgba(255,255,255,0.75); }
+  .toast { position:fixed; bottom:24px; right:24px; background:#1f2937; color:white; padding:11px 18px; border-radius:8px; font-size:13px; font-weight:500; opacity:0; transform:translateY(8px); transition:all 0.2s; pointer-events:none; z-index:999; }
+  .toast.show { opacity:1; transform:translateY(0); }
+
+  /* Field locked */
+  .field-locked-wrapper { position:relative; }
+  .field-locked-wrapper input[readonly] { background:#f3f4f6; color:#6b7280; cursor:not-allowed; border-color:#e5e7eb; padding-right:34px; }
+  .field-locked-wrapper input[readonly]:focus { border-color:#e5e7eb; box-shadow:none; }
+  .lock-icon { position:absolute; right:10px; top:50%; transform:translateY(-50%); font-size:13px; color:#9ca3af; pointer-events:none; }
+
+  /* Event banner section */
+  .event-section { display:none; }
+  .event-section.has-events { display:block; }
+  .event-banner-card { border:1px solid #e5e7eb; border-radius:8px; padding:10px 12px; margin-bottom:8px; background:#f9fafb; }
+  .event-banner-card.active-event { border-color:#1e5fa8; background:#f0f7ff; }
+  .event-banner-toggle { display:flex; align-items:center; gap:8px; cursor:pointer; }
+  .event-banner-toggle input { display:none; }
+  .event-check { width:15px; height:15px; border:1.5px solid #d1d5db; border-radius:3px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:10px; color:transparent; }
+  .event-banner-toggle input:checked ~ .event-check { background:#1e5fa8; border-color:#1e5fa8; color:white; }
+  .event-info { flex:1; }
+  .event-name { font-size:12px; font-weight:600; color:#1e5fa8; }
+  .event-date { font-size:10px; color:#9ca3af; margin-top:1px; }
+  .event-badge { font-size:9px; font-weight:700; background:#dcfce7; color:#166534; border-radius:99px; padding:2px 7px; letter-spacing:0.05em; }
+  .event-banner-thumb { width:100%; margin-top:8px; border-radius:4px; overflow:hidden; display:none; }
+  .event-banner-thumb img { width:100%; height:auto; display:block; border-radius:4px; }
+  .event-banner-toggle input:checked ~ .event-banner-thumb { display:block; }
+
+  /* Responsive */
+  @media (max-width:1024px) {
+    .container { flex-direction:column; }
+    .left-panel { width:100%; min-width:0; border-right:none; border-bottom:1px solid #e5e7eb; }
+    .right-panel { padding:20px 20px; }
+  }
+  @media (max-width:640px) {
+    .app-header { padding:14px 16px; }
+    .app-header h1 { font-size:16px; }
+    .app-header p { font-size:11px; }
+    .left-panel { padding:18px 16px; }
+    .right-panel { padding:16px; }
+    .products-grid { grid-template-columns:1fr; }
+    .copy-section { flex-direction:column; }
+    .preview-body { padding:14px 12px; }
+    .instructions { font-size:11px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <h1>Piranusa Email Signature Generator</h1>
+  <p>Isi form di kiri → preview terbentuk → salin ke email client</p>
+</div>
+
+<div class="container">
+  <div class="left-panel">
+    <div class="section-title">Informasi Pengirim</div>
+    <div class="form-group"><label>Nama Lengkap *</label><input type="text" id="name" value="Kristian" oninput="updatePreview()"></div>
+    <div class="form-group"><label>Jabatan *</label><input type="text" id="title" value="Chief Executive Officer" oninput="updatePreview()"></div>
+    <div class="form-group"><label>Nomor Telepon</label><input type="text" id="phone" value="+62 811 1085 850" oninput="updatePreview()"></div>
+    <div class="form-group"><label>Email</label><input type="text" id="email" value="info@piranusa.com" oninput="updatePreview()"></div>
+    <div class="form-group"><label>Website</label><div class="field-locked-wrapper"><input type="text" id="website" value="www.piranusa.com" readonly><span class="lock-icon">🔒</span></div></div>
+    <div class="form-group"><label>Alamat</label><div class="field-locked-wrapper"><input type="text" id="address" value="Jl. K.H. Mas Mansyur No.121 - Kota Jakarta Pusat 10220 - Indonesia" readonly><span class="lock-icon">🔒</span></div></div>
+
+    <!-- EVENT BANNER SECTION (muncul otomatis jika ada event aktif) -->
+    <div class="event-section" id="event-section">
+      <div class="section-title">Banner Event Seasonal</div>
+      <div id="event-list"></div>
+    </div>
+
+    <div class="section-title">Produk yang Ditampilkan</div>
+    <div class="products-grid" id="products-grid"></div>
+    <div class="section-title" style="margin-top:18px;">Opsi Tambahan</div>
+    <div class="product-card" style="width:100%;">
+      <label class="product-toggle" style="cursor:pointer;padding-left:10px;">
+        <input type="checkbox" id="show-disclaimer" checked onchange="updatePreview()">
+        <span class="check">✓</span>
+        <span style="font-size:12px;color:#374151;">Tampilkan Disclaimer</span>
+      </label>
+    </div>
+    <button class="btn-generate" onclick="updatePreview()">Perbarui Preview</button>
+  </div>
+
+  <div class="right-panel">
+    <div class="preview-label" style="display:flex;align-items:center;justify-content:space-between;">
+      <span>Preview Signature Email</span>
+      <span id="width-badge" style="font-size:10px;font-weight:600;color:#1e5fa8;background:#e8f1fb;border:1px solid #c7dcf2;padding:3px 9px;border-radius:99px;letter-spacing:0.04em;">8 logo aktif</span>
+    </div>
+    <div class="style-switcher">
+      <button class="style-btn active" onclick="setStyle('classic')" id="btn-classic">
+        <span class="style-name">Gradient Bar</span>
+        <span class="style-desc">Bar biru ke cyan</span>
+      </button>
+      <button class="style-btn" onclick="setStyle('executive')" id="btn-executive">
+        <span class="style-name">Deep Gradient</span>
+        <span class="style-desc">Header navy diagonal</span>
+      </button>
+      <button class="style-btn" onclick="setStyle('minimal')" id="btn-minimal">
+        <span class="style-name">Frost</span>
+        <span class="style-desc">Background ice blue</span>
+      </button>
+    </div>
+    <div class="preview-wrapper">
+      <div class="preview-topbar">Email Signature Preview</div>
+      <div class="preview-body"><div id="signature-preview"></div></div>
+    </div>
+    <div class="copy-section">
+      <button class="btn-copy btn-copy-html" onclick="copySignature()">📋 Salin Signature</button>
+    </div>
+    <div class="instructions">
+      <strong>Gmail:</strong> Settings → See all settings → General → Signature → New/Edit → Paste (Ctrl+V).<br>
+      <strong>Outlook:</strong> File → Options → Mail → Signatures → New/Edit → Paste (Ctrl+V).<br>
+      <strong>Thunderbird:</strong> Tools → Account Settings → Signature → centang HTML → Paste.
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const LOGO_DATA = {
+  zwcad:        "https://i.imgur.com/emblfNf.png",
+  archicad:     "https://i.imgur.com/bXIJblF.png",
+  enscape:      "https://i.imgur.com/3vpE3PY.png",
+  sketchup:     "https://i.imgur.com/5lS937J.png",
+  d5render:     "https://i.imgur.com/Pe2b4wO.png",
+  zw3d:         "https://i.imgur.com/MhJ9e1g.png",
+  vray:         "https://i.imgur.com/EU4HSFL.png",
+  microsoft365: "https://i.imgur.com/sFa9ohF.png",
+  corona:       "https://i.imgur.com/87fZI82.png",
+  piranusa:     "https://i.imgur.com/TOHwiSw.png",
+};
+const ICON_PHONE = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjMUU1RkE4IiBkPSJNNi42IDEwLjhjMS40IDIuOCAzLjggNS4xIDYuNiA2LjZsMi4yLTIuMmMuMy0uMy43LS40IDEtLjIgMS4xLjQgMi4zLjYgMy42LjYuNiAwIDEgLjQgMSAxVjIwYzAgLjYtLjQgMS0xIDFDMTAuNiAyMSAzIDEzLjQgMyA0YzAtLjYuNC0xIDEtMWgzLjVjLjYgMCAxIC40IDEgMSAwIDEuMy4yIDIuNS42IDMuNi4xLjMgMCAuNy0uMiAxTDYuNiAxMC44eiIvPjwvc3ZnPg==";
+const ICON_MAIL  = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjMUU1RkE4IiBkPSJNMjAgNEg0Yy0xLjEgMC0yIC45LTIgMnYxMmMwIDEuMS45IDIgMiAyaDE2YzEuMSAwIDItLjkgMi0yVjZjMC0xLjEtLjktMi0yLTJ6bTAgNGwtOCA1LTgtNVY2bDggNSA4LTV2MnoiLz48L3N2Zz4=";
+const ICON_WEB   = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjMUU1RkE4IiBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMCAxMC00LjQ4IDEwLTEwUzE3LjUyIDIgMTIgMnptLTEgMTcuOTNjLTMuOTUtLjQ5LTctMy44NS03LTcuOTMgMC0uNjIuMDgtMS4yMS4yMS0xLjc5TDkgMTV2MWMwIDEuMS45IDIgMiAydjEuOTN6bTYuOS0yLjU0Yy0uMjYtLjgxLTEtMS4zOS0xLjktMS4zOWgtMXYtM2MwLS41NS0uNDUtMS0xLTFIOHYtMmgyYy41NSAwIDEtLjQ1IDEtMVY3aDJjMS4xIDAgMi0uOSAyLTJ2LS40MWMyLjkzIDEuMTkgNSA0LjA2IDUgNy40MSAwIDIuMDgtLjggMy45Ny0yLjEgNS4zOXoiLz48L3N2Zz4=";
+const ICON_LOC   = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjMUU1RkE4IiBkPSJNMTIgMkM4LjEzIDIgNSA1LjEzIDUgOWMwIDUuMjUgNyAxMyA3IDEzczctNy43NSA3LTEzYzAtMy44Ny0zLjEzLTctNy03em0wIDkuNWMtMS4zOCAwLTIuNS0xLjEyLTIuNS0yLjVzMS4xMi0yLjUgMi41LTIuNSAyLjUgMS4xMiAyLjUgMi41LTEuMTIgMi41LTIuNSAyLjV6Ii8+PC9zdmc+";
+
+const DEFAULT_ON = ['zwcad','archicad','enscape','sketchup','d5render','zw3d','vray','microsoft365'];
+
+let PRODUCTS = [
+  { id:'zwcad',        label:'ZWCAD' },
+  { id:'archicad',     label:'Archicad' },
+  { id:'enscape',      label:'Enscape' },
+  { id:'sketchup',     label:'SketchUp' },
+  { id:'d5render',     label:'D5 Render' },
+  { id:'zw3d',         label:'ZW3D' },
+  { id:'vray',         label:'V-Ray' },
+  { id:'microsoft365', label:'Microsoft 365' },
+  { id:'corona',       label:'Chaos Corona' },
+];
+
+// Event banners loaded from events.json
+let EVENTS = [];
+
+let dragSrcId = null;
+
+const DRAG_HANDLE_SVG = `<svg width="10" height="14" viewBox="0 0 10 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="3" cy="2"  r="1.5" fill="#c4cdd6"/>
+  <circle cx="7" cy="2"  r="1.5" fill="#c4cdd6"/>
+  <circle cx="3" cy="7"  r="1.5" fill="#c4cdd6"/>
+  <circle cx="7" cy="7"  r="1.5" fill="#c4cdd6"/>
+  <circle cx="3" cy="12" r="1.5" fill="#c4cdd6"/>
+  <circle cx="7" cy="12" r="1.5" fill="#c4cdd6"/>
+</svg>`;
+
+// ─── LOAD EVENTS ────────────────────────────────────────────────────────────
+async function loadEvents() {
+  try {
+    const resp = await fetch('events.json?t=' + Date.now());
+    const data = await resp.json();
+    EVENTS = (data.events || []).filter(e => e.active !== false);
+    renderEventSection();
+    updatePreview();
+  } catch(e) {
+    // No events or fetch failed — silent fail
+    EVENTS = [];
+  }
+}
+
+function renderEventSection() {
+  const section = document.getElementById('event-section');
+  const list = document.getElementById('event-list');
+  if (!EVENTS.length) {
+    section.classList.remove('has-events');
+    list.innerHTML = '';
+    return;
+  }
+  section.classList.add('has-events');
+  list.innerHTML = EVENTS.map(ev => {
+    const isNew = ev.is_new !== false;
+    return `<div class="event-banner-card ${isNew ? 'active-event' : ''}">
+      <label class="event-banner-toggle">
+        <input type="checkbox" id="ev-${ev.id}" ${isNew ? 'checked' : ''} onchange="updatePreview()">
+        <div class="event-info">
+          <div class="event-name">${ev.name}</div>
+          ${ev.date ? `<div class="event-date">${ev.date}</div>` : ''}
+        </div>
+        ${isNew ? '<span class="event-badge">AKTIF</span>' : ''}
+        <span class="event-check">✓</span>
+        ${ev.banner_url ? `<div class="event-banner-thumb"><img src="${ev.banner_url}" alt="${ev.name}" loading="lazy"></div>` : ''}
+      </label>
+    </div>`;
+  }).join('');
+}
+
+function getActiveEventBanners() {
+  return EVENTS.filter(ev => {
+    const cb = document.getElementById('ev-' + ev.id);
+    return cb && cb.checked && ev.banner_url;
+  });
+}
+
+// ─── PRODUCTS ───────────────────────────────────────────────────────────────
+function buildProducts() {
+  const grid = document.getElementById('products-grid');
+  const checkedState = {};
+  PRODUCTS.forEach(p => {
+    const el = document.getElementById('prod-'+p.id);
+    checkedState[p.id] = el ? el.checked : DEFAULT_ON.includes(p.id);
+  });
+
+  grid.innerHTML = PRODUCTS.map(p => {
+    const logoSrc = LOGO_DATA[p.id] || '';
+    const thumb = logoSrc
+      ? `<img src="${logoSrc}" alt="${p.label}" class="product-logo-preview">`
+      : `<span style="font-size:11px;font-weight:600;">${p.label}</span>`;
+    const isChecked = checkedState[p.id];
+    return `<div class="product-card" draggable="true" data-id="${p.id}">
+      <div class="drag-handle" title="Drag untuk reorder">${DRAG_HANDLE_SVG}</div>
+      <label class="product-toggle" onclick="event.stopPropagation()">
+        <input type="checkbox" id="prod-${p.id}" ${isChecked?'checked':''} onchange="updatePreview()">
+        <span class="check">✓</span>${thumb}
+      </label>
+    </div>`;
+  }).join('');
+
+  grid.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('dragstart', onDragStart);
+    card.addEventListener('dragover',  onDragOver);
+    card.addEventListener('dragleave', onDragLeave);
+    card.addEventListener('drop',      onDrop);
+    card.addEventListener('dragend',   onDragEnd);
+  });
+}
+
+function onDragStart(e) {
+  dragSrcId = this.dataset.id;
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', dragSrcId);
+}
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  if (this.dataset.id !== dragSrcId) this.classList.add('drag-over');
+}
+function onDragLeave() { this.classList.remove('drag-over'); }
+function onDrop(e) {
+  e.preventDefault();
+  const targetId = this.dataset.id;
+  if (targetId === dragSrcId) return;
+  const srcIdx = PRODUCTS.findIndex(p => p.id === dragSrcId);
+  const tgtIdx = PRODUCTS.findIndex(p => p.id === targetId);
+  if (srcIdx === -1 || tgtIdx === -1) return;
+  const [moved] = PRODUCTS.splice(srcIdx, 1);
+  PRODUCTS.splice(tgtIdx, 0, moved);
+  buildProducts();
+  updatePreview();
+}
+function onDragEnd() {
+  document.querySelectorAll('.product-card').forEach(c => c.classList.remove('dragging', 'drag-over'));
+  dragSrcId = null;
+}
+
+function getCheckedProducts() {
+  return PRODUCTS.filter(p => document.getElementById('prod-'+p.id)?.checked);
+}
+
+function iconImg(src, valign) {
+  return `<img src="${src}" width="16" height="16" style="display:inline-block;vertical-align:${valign||'middle'};border:0;outline:none;">`;
+}
+
+// ─── EVENT BANNER HTML BLOCK ─────────────────────────────────────────────────
+function buildEventBannersHTML(activeEvents) {
+  if (!activeEvents.length) return '';
+  const bannerImgs = activeEvents.map(ev =>
+    `<a href="${ev.link || '#'}" style="display:block;text-decoration:none;" ${ev.link ? 'target="_blank"' : ''}>
+      <img src="${ev.banner_url}" alt="${ev.name}" style="display:block;width:100%;height:auto;border:0;outline:none;border-radius:4px;margin-bottom:${activeEvents.length > 1 ? '6' : '0'}px;">
+    </a>`
+  ).join('');
+  return `<div style="margin-top:14px;padding-top:12px;border-top:1px solid #e5e7eb;">${bannerImgs}</div>`;
+}
+
+// ─── DISCLAIMER ──────────────────────────────────────────────────────────────
+function buildDisclaimer(style) {
+  const borderColor = style === 'executive' ? '#f0f4f8' : style === 'minimal' ? '#f1f5f9' : '#e5e7eb';
+  const padding = style === 'executive' ? '0 20px 16px' : '0';
+  const margin = style === 'executive' ? '' : 'margin-top:14px;padding-top:10px;';
+  return `<div style="${style==='executive'?`padding:${padding};box-sizing:border-box;`:`${margin}max-width:100%;box-sizing:border-box;`}">
+  ${style==='executive' ? `<div style="padding-top:10px;border-top:1px solid ${borderColor};">` : `<div style="border-top:1px solid ${borderColor};padding-top:10px;">`}
+    <p style="font-family:Arial,sans-serif;font-size:9.5px;font-weight:700;color:#6b7280;margin:0 0 4px 0;text-transform:uppercase;letter-spacing:0.08em;">Confidentiality Notice &amp; Disclaimer</p>
+    <p style="font-family:Arial,sans-serif;font-size:9.5px;color:#9ca3af;margin:0 0 5px 0;line-height:1.6;word-wrap:break-word;overflow-wrap:break-word;">This email and any attachments are intended solely for the use of the named addressee(s) and may contain information that is confidential, proprietary, or legally privileged. If you are not the intended recipient, you are hereby notified that any disclosure, copying, distribution, or use of the contents of this message is strictly prohibited. If you have received this communication in error, please notify the sender immediately and permanently delete this email and all copies from your system.</p>
+    <p style="font-family:Arial,sans-serif;font-size:9.5px;color:#9ca3af;margin:0;line-height:1.6;word-wrap:break-word;overflow-wrap:break-word;">PT. Piranti Teknologi Nusantara (PIRANUSA) does not accept liability for any loss or damage arising from the use of this email or its attachments, including but not limited to viruses, malware, or other harmful components. The views and opinions expressed in this email are those of the sender and do not necessarily reflect the official position of PT. Piranti Teknologi Nusantara. This email is not intended to constitute a legally binding agreement unless expressly stated and confirmed in writing by an authorised representative of the company.</p>
+  </div>
+</div>`;
+}
+
+// ─── STYLE BUILDERS ──────────────────────────────────────────────────────────
+let currentStyle = 'classic';
+
+function setStyle(style) {
+  currentStyle = style;
+  ['classic','executive','minimal'].forEach(s => {
+    document.getElementById('btn-'+s).classList.toggle('active', s === style);
+  });
+  updatePreview();
+}
+
+function buildClassic(name, titleV, phone, email, website, address, products, showDisc, eventBanners) {
+  const productCount = products.length;
+  const piranusaSrc = LOGO_DATA['piranusa'];
+  const piranusaImg = piranusaSrc
+    ? `<img src="${piranusaSrc}" alt="PIRANUSA" height="44" style="display:block;height:44px;width:auto;border:0;outline:none;">`
+    : `<span style="font-family:Arial,sans-serif;font-size:20px;font-weight:900;color:#1E5FA8;">PIRANUSA</span>`;
+
+  const contactRows = [
+    phone   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_PHONE)}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${phone}</span></td></tr></table></td></tr>` : '',
+    email   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_MAIL)}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${email}</span></td></tr></table></td></tr>` : '',
+    website ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_WEB)}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${website}</span></td></tr></table></td></tr>` : '',
+    address ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:top;padding-top:2px;width:22px;text-align:center;">${iconImg(ICON_LOC,'top')}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${address}</span></td></tr></table></td></tr>` : '',
+  ].filter(Boolean).join('');
+
+  const logoItems = products.map(p => {
+    const src = LOGO_DATA[p.id];
+    if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 12px 8px 0;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#1E5FA8;border:1.5px solid #1E5FA8;padding:3px 7px;border-radius:3px;white-space:nowrap;">${p.label}</span>`;
+    return `<span style="display:inline-flex;align-items:center;margin:0 12px 8px 0;"><img src="${src}" alt="${p.label}" height="22" style="display:block;height:22px;width:auto;border:0;outline:none;"></span>`;
+  }).join('');
+
+  const logoStrip = productCount > 0 ? `<div style="display:flex;flex-wrap:wrap;align-items:center;padding-top:12px;margin-top:2px;border-top:1px solid #f0f4f8;margin-bottom:-8px;">${logoItems}</div>` : '';
+  const disc = showDisc ? buildDisclaimer('classic') : '';
+  const banners = buildEventBannersHTML(eventBanners);
+
+  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;" data-sig-width="responsive" data-product-count="${productCount}">
+  <div style="display:flex;max-width:100%;box-sizing:border-box;">
+    <div style="width:5px;min-width:5px;background:linear-gradient(180deg,#1E5FA8 0%,#38bdf8 100%);border-radius:4px;flex-shrink:0;margin-right:18px;"></div>
+    <div style="flex:1;min-width:0;padding:2px 0;">
+      <p style="font-family:Arial,sans-serif;font-size:21px;font-weight:800;color:#0f172a;margin:0 0 1px 0;letter-spacing:-0.3px;">${name}</p>
+      <p style="font-family:Arial,sans-serif;font-size:10.5px;font-weight:700;color:#1E5FA8;text-transform:uppercase;letter-spacing:0.1em;margin:0 0 14px 0;">${titleV}</p>
+      <div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:14px;padding-bottom:14px;border-bottom:1.5px solid #e8f0f8;">
+        <div style="flex-shrink:0;padding-right:16px;padding-bottom:4px;">${piranusaImg}</div>
+        <div style="border-left:1px solid #d1d5db;padding-left:16px;padding-bottom:4px;">
+          <span style="font-family:Arial,sans-serif;font-size:12px;color:#94a3b8;font-style:italic;">We Get IT Done</span>
+          <p style="font-family:Arial,sans-serif;font-size:10px;color:#cbd5e1;margin:2px 0 0 0;">PT. Piranti Teknologi Nusantara</p>
+        </div>
+      </div>
+      <table cellpadding="0" cellspacing="0" border="0" style="margin-bottom:${productCount>0?'12':'0'}px;max-width:100%;">${contactRows}</table>
+      ${logoStrip}
+    </div>
+  </div>
+  ${banners}
+  ${disc}
+</div>`;
+}
+
+function buildExecutive(name, titleV, phone, email, website, address, products, showDisc, eventBanners) {
+  const productCount = products.length;
+  const piranusaSrc = LOGO_DATA['piranusa'];
+  const piranusaImg = piranusaSrc
+    ? `<img src="${piranusaSrc}" alt="PIRANUSA" height="38" style="display:block;height:38px;width:auto;border:0;outline:none;">`
+    : `<span style="font-family:Arial,sans-serif;font-size:18px;font-weight:900;color:white;">PIRANUSA</span>`;
+
+  const contactRows = [
+    phone   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_PHONE)}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${phone}</span></td></tr></table></td></tr>` : '',
+    email   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_MAIL)}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${email}</span></td></tr></table></td></tr>` : '',
+    website ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_WEB)}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${website}</span></td></tr></table></td></tr>` : '',
+    address ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0"><tr><td style="padding-right:10px;vertical-align:top;padding-top:2px;width:22px;text-align:center;">${iconImg(ICON_LOC,'top')}</td><td><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${address}</span></td></tr></table></td></tr>` : '',
+  ].filter(Boolean).join('');
+
+  const logoItems = products.map(p => {
+    const src = LOGO_DATA[p.id];
+    if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;font-family:Arial,sans-serif;font-size:9px;font-weight:700;color:#1E5FA8;border:1px solid #bfdbfe;padding:2px 7px;border-radius:3px;white-space:nowrap;background:#eff6ff;">${p.label}</span>`;
+    return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;"><img src="${src}" alt="${p.label}" height="20" style="display:block;height:20px;width:auto;border:0;outline:none;"></span>`;
+  }).join('');
+
+  const logoStrip = productCount > 0
+    ? `<div style="padding:12px 20px 14px;border-top:1px solid #f0f4f8;box-sizing:border-box;"><div style="display:flex;flex-wrap:wrap;align-items:center;margin-bottom:-6px;">${logoItems}</div></div>`
+    : '';
+  const disc = showDisc ? buildDisclaimer('executive') : '';
+  const banners = buildEventBannersHTML(eventBanners);
+
+  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;border-radius:6px;overflow:hidden;border:1px solid #e2e8f0;" data-sig-width="responsive" data-product-count="${productCount}">
+  <div style="background:linear-gradient(135deg,#0a1f44 0%,#1E5FA8 60%,#2d7dd2 100%);padding:18px 20px 16px;box-sizing:border-box;">
+    <p style="font-family:Arial,sans-serif;font-size:21px;font-weight:800;color:#ffffff;margin:0 0 2px 0;letter-spacing:-0.3px;">${name}</p>
+    <p style="font-family:Arial,sans-serif;font-size:10px;font-weight:600;color:#93c5fd;text-transform:uppercase;letter-spacing:0.14em;margin:0;">${titleV}</p>
+  </div>
+  <div style="height:3px;background:linear-gradient(90deg,#38bdf8 0%,#1E5FA8 50%,#0a1f44 100%);"></div>
+  <div style="padding:16px 20px 14px;background:#ffffff;box-sizing:border-box;">
+    <div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f0f4f8;">
+      <div style="flex-shrink:0;padding-right:16px;padding-bottom:4px;">${piranusaImg}</div>
+      <div style="border-left:1px solid #e2e8f0;padding-left:16px;padding-bottom:4px;">
+        <span style="font-family:Arial,sans-serif;font-size:12px;color:#94a3b8;font-style:italic;">We Get IT Done</span>
+        <p style="font-family:Arial,sans-serif;font-size:10px;color:#cbd5e1;margin:2px 0 0 0;">PT. Piranti Teknologi Nusantara</p>
+      </div>
+    </div>
+    <table cellpadding="0" cellspacing="0" border="0" style="max-width:100%;">${contactRows}</table>
+  </div>
+  ${logoStrip}
+  ${banners ? `<div style="padding:0 20px 14px;box-sizing:border-box;">${banners}</div>` : ''}
+  ${disc}
+</div>`;
+}
+
+function buildMinimal(name, titleV, phone, email, website, address, products, showDisc, eventBanners) {
+  const productCount = products.length;
+  const piranusaSrc = LOGO_DATA['piranusa'];
+  const piranusaImg = piranusaSrc
+    ? `<img src="${piranusaSrc}" alt="PIRANUSA" height="30" style="display:block;height:30px;width:auto;border:0;outline:none;">`
+    : `<span style="font-family:Arial,sans-serif;font-size:15px;font-weight:900;color:#1E5FA8;">PIRANUSA</span>`;
+
+  const contactLine = [
+    phone   ? `<span style="font-family:Arial,sans-serif;font-size:12px;color:#64748b;">${phone}</span>` : '',
+    email   ? `<span style="font-family:Arial,sans-serif;font-size:12px;color:#1E5FA8;">${email}</span>` : '',
+    website ? `<span style="font-family:Arial,sans-serif;font-size:12px;color:#1E5FA8;">${website}</span>` : '',
+  ].filter(Boolean).join(`<span style="color:#cbd5e1;margin:0 8px;font-size:12px;">·</span>`);
+
+  const logoItems = products.map(p => {
+    const src = LOGO_DATA[p.id];
+    if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;font-family:Arial,sans-serif;font-size:9px;font-weight:700;color:#64748b;border:1px solid #e2e8f0;padding:2px 7px;border-radius:99px;white-space:nowrap;background:#f8fafc;">${p.label}</span>`;
+    return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;opacity:0.85;"><img src="${src}" alt="${p.label}" height="18" style="display:block;height:18px;width:auto;border:0;outline:none;"></span>`;
+  }).join('');
+
+  const logoStrip = productCount > 0
+    ? `<div style="display:flex;flex-wrap:wrap;align-items:center;padding-top:10px;margin-top:12px;border-top:1px solid #f1f5f9;margin-bottom:-6px;">${logoItems}</div>`
+    : '';
+  const disc = showDisc ? buildDisclaimer('minimal') : '';
+  const banners = buildEventBannersHTML(eventBanners);
+
+  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);border-radius:6px;padding:20px 22px 18px;border:1px solid #e2e8f0;" data-sig-width="responsive" data-product-count="${productCount}">
+  <p style="font-family:Arial,sans-serif;font-size:20px;font-weight:800;color:#0f172a;margin:0 0 2px 0;letter-spacing:-0.3px;">${name}</p>
+  <div style="height:2px;background:linear-gradient(90deg,#1E5FA8 0%,#38bdf8 60%,transparent 100%);margin-bottom:6px;border-radius:2px;max-width:180px;"></div>
+  <p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#1E5FA8;text-transform:uppercase;letter-spacing:0.12em;margin:0 0 14px 0;">${titleV}</p>
+  <div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #e2e8f0;">
+    <div style="padding-right:14px;padding-bottom:4px;">${piranusaImg}</div>
+    <div style="padding-bottom:4px;">
+      <span style="font-family:Arial,sans-serif;font-size:11px;color:#94a3b8;font-style:italic;">We Get IT Done</span>
+    </div>
+  </div>
+  ${contactLine ? `<div style="margin-bottom:${address?'6':'0'}px;">${contactLine}</div>` : ''}
+  ${address ? `<div style="display:flex;align-items:flex-start;">
+    <span style="padding-right:6px;flex-shrink:0;">${iconImg(ICON_LOC,'top')}</span>
+    <span style="font-family:Arial,sans-serif;font-size:12px;color:#64748b;">${address}</span>
+  </div>` : ''}
+  ${logoStrip}
+  ${banners}
+  ${disc}
+</div>`;
+}
+
+function buildSignatureHTML() {
+  const name    = document.getElementById('name').value.trim()    || 'Your Name';
+  const titleV  = document.getElementById('title').value.trim()   || 'Your Title';
+  const phone   = document.getElementById('phone').value.trim();
+  const email   = document.getElementById('email').value.trim();
+  const website = document.getElementById('website').value.trim();
+  const address = document.getElementById('address').value.trim();
+  const products     = getCheckedProducts();
+  const showDisc     = document.getElementById('show-disclaimer').checked;
+  const eventBanners = getActiveEventBanners();
+
+  if (currentStyle === 'executive') return buildExecutive(name, titleV, phone, email, website, address, products, showDisc, eventBanners);
+  if (currentStyle === 'minimal')   return buildMinimal(name, titleV, phone, email, website, address, products, showDisc, eventBanners);
+  return buildClassic(name, titleV, phone, email, website, address, products, showDisc, eventBanners);
+}
+
+function updatePreview() {
+  document.getElementById('signature-preview').innerHTML = buildSignatureHTML();
+  const outerDiv = document.querySelector('#signature-preview [data-product-count]');
+  const badge = document.getElementById('width-badge');
+  if (outerDiv && badge) {
+    const c = outerDiv.getAttribute('data-product-count');
+    badge.textContent = `${c} logo aktif`;
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+async function copySignature() {
+  const html = buildSignatureHTML();
+  if (navigator.clipboard && window.ClipboardItem) {
+    try {
+      const blob = new Blob([html], { type: 'text/html' });
+      await navigator.clipboard.write([new ClipboardItem({ 'text/html': blob })]);
+      showToast('✅ Signature disalin — paste langsung di Gmail atau Outlook!');
+      return;
+    } catch(e) {}
+  }
+  try {
+    const el = document.getElementById('signature-preview');
+    const sel = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    sel.removeAllRanges();
+    sel.addRange(range);
+    const ok = document.execCommand('copy');
+    sel.removeAllRanges();
+    if (ok) { showToast('✅ Signature disalin — paste langsung di Gmail atau Outlook!'); return; }
+  } catch(e) {}
+  showToast('❌ Browser tidak mendukung copy otomatis. Pilih teks signature secara manual lalu Ctrl+C.');
+}
+
+buildProducts();
+updatePreview();
+loadEvents();
+</script>
+</body>
+</html>
