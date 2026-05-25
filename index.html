@@ -119,10 +119,10 @@
 <div class="container">
   <div class="left-panel">
     <div class="section-title">Informasi Pengirim</div>
-    <div class="form-group"><label>Nama Lengkap *</label><input type="text" id="name" value="Kristian" oninput="updatePreview()"></div>
-    <div class="form-group"><label>Jabatan *</label><input type="text" id="title" value="Chief Executive Officer" oninput="updatePreview()"></div>
-    <div class="form-group"><label>Nomor Telepon</label><input type="text" id="phone" value="+62 811 1085 850" oninput="updatePreview()"></div>
-    <div class="form-group"><label>Email</label><input type="text" id="email" value="info@piranusa.com" oninput="updatePreview()"></div>
+    <div class="form-group"><label>Nama Lengkap *</label><input type="text" id="name" value="" placeholder="Nama Lengkap" oninput="updatePreview()"></div>
+    <div class="form-group"><label>Jabatan *</label><input type="text" id="title" value="" placeholder="Jabatan" oninput="updatePreview()"></div>
+    <div class="form-group"><label>Nomor Telepon</label><input type="text" id="phone" value="" placeholder="+62 8xx xxxx xxxx" oninput="updatePreview()"></div>
+    <div class="form-group"><label>Email</label><input type="text" id="email" value="" placeholder="email@piranusa.com" oninput="updatePreview()"></div>
     <div class="form-group"><label>Website</label><div class="field-locked-wrapper"><input type="text" id="website" value="www.piranusa.com" readonly><span class="lock-icon">🔒</span></div></div>
     <div class="form-group"><label>Alamat</label><div class="field-locked-wrapper"><input type="text" id="address" value="Jl. K.H. Mas Mansyur No.121 - Kota Jakarta Pusat 10220 - Indonesia" readonly><span class="lock-icon">🔒</span></div></div>
 
@@ -194,10 +194,10 @@ const LOGO_DATA = {
   corona:       "https://i.imgur.com/87fZI82.png",
   piranusa:     "https://i.imgur.com/TOHwiSw.png",
 };
-const ICON_PHONE = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjMUU1RkE4IiBkPSJNNi42IDEwLjhjMS40IDIuOCAzLjggNS4xIDYuNiA2LjZsMi4yLTIuMmMuMy0uMy43LS40IDEtLjIgMS4xLjQgMi4zLjYgMy42LjYuNiAwIDEgLjQgMSAxVjIwYzAgLjYtLjQgMS0xIDFDMTAuNiAyMSAzIDEzLjQgMyA0YzAtLjYuNC0xIDEtMWgzLjVjLjYgMCAxIC40IDEgMSAwIDEuMy4yIDIuNS42IDMuNi4xLjMgMCAuNy0uMiAxTDYuNiAxMC44eiIvPjwvc3ZnPg==";
-const ICON_MAIL  = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjMUU1RkE4IiBkPSJNMjAgNEg0Yy0xLjEgMC0yIC45LTIgMnYxMmMwIDEuMS45IDIgMiAyaDE2YzEuMSAwIDItLjkgMi0yVjZjMC0xLjEtLjktMi0yLTJ6bTAgNGwtOCA1LTgtNVY2bDggNSA4LTV2MnoiLz48L3N2Zz4=";
-const ICON_WEB   = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjMUU1RkE4IiBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMCAxMC00LjQ4IDEwLTEwUzE3LjUyIDIgMTIgMnptLTEgMTcuOTNjLTMuOTUtLjQ5LTctMy44NS03LTcuOTMgMC0uNjIuMDgtMS4yMS4yMS0xLjc5TDkgMTV2MWMwIDEuMS45IDIgMiAydjEuOTN6bTYuOS0yLjU0Yy0uMjYtLjgxLTEtMS4zOS0xLjktMS4zOWgtMXYtM2MwLS41NS0uNDUtMS0xLTFIOHYtMmgyYy41NSAwIDEtLjQ1IDEtMVY3aDJjMS4xIDAgMi0uOSAyLTJ2LS40MWMyLjkzIDEuMTkgNSA0LjA2IDUgNy40MSAwIDIuMDgtLjggMy45Ny0yLjEgNS4zOXoiLz48L3N2Zz4=";
-const ICON_LOC   = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjMUU1RkE4IiBkPSJNMTIgMkM4LjEzIDIgNSA1LjEzIDUgOWMwIDUuMjUgNyAxMyA3IDEzczctNy43NSA3LTEzYzAtMy44Ny0zLjEzLTctNy03em0wIDkuNWMtMS4zOCAwLTIuNS0xLjEyLTIuNS0yLjVzMS4xMi0yLjUgMi41LTIuNSAyLjUgMS4xMiAyLjUgMi41LTEuMTIgMi41LTIuNSAyLjV6Ii8+PC9zdmc+";
+const ICON_PHONE = "https://raw.githubusercontent.com/faturrukamen/SignaturemailPira/main/icons/phone.png";
+const ICON_MAIL  = "https://raw.githubusercontent.com/faturrukamen/SignaturemailPira/main/icons/mail.png";
+const ICON_WEB   = "https://raw.githubusercontent.com/faturrukamen/SignaturemailPira/main/icons/web.png";
+const ICON_LOC   = "https://raw.githubusercontent.com/faturrukamen/SignaturemailPira/main/icons/location.png";
 
 const DEFAULT_ON = ['zwcad','archicad','enscape','sketchup','d5render','zw3d','vray','microsoft365'];
 
@@ -347,12 +347,17 @@ function iconImg(src, valign) {
 // ─── EVENT BANNER HTML BLOCK ─────────────────────────────────────────────────
 function buildEventBannersHTML(activeEvents) {
   if (!activeEvents.length) return '';
-  const bannerImgs = activeEvents.map(ev =>
+  const bannerImgs = activeEvents.map((ev, i) =>
     `<a href="${ev.link || '#'}" style="display:block;text-decoration:none;" ${ev.link ? 'target="_blank"' : ''}>
-      <img src="${ev.banner_url}" alt="${ev.name}" style="display:block;width:100%;height:auto;border:0;outline:none;border-radius:4px;margin-bottom:${activeEvents.length > 1 ? '6' : '0'}px;">
+      <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px;width:100%;">
+        <tr><td style="padding-bottom:${i < activeEvents.length-1 ? '6' : '0'}px;">
+          <img src="${ev.banner_url}" alt="${ev.name}" width="600"
+            style="display:block;width:100%;max-width:600px;height:auto;border:0;outline:none;border-radius:4px;">
+        </td></tr>
+      </table>
     </a>`
   ).join('');
-  return `<div style="margin-top:14px;padding-top:12px;border-top:1px solid #e5e7eb;">${bannerImgs}</div>`;
+  return `<table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px;margin-top:14px;border-top:1px solid #e5e7eb;padding-top:12px;"><tr><td>${bannerImgs}</td></tr></table>`;
 }
 
 // ─── DISCLAIMER ──────────────────────────────────────────────────────────────
@@ -397,7 +402,7 @@ function buildClassic(name, titleV, phone, email, website, address, products, sh
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
     if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 12px 8px 0;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#1E5FA8;border:1.5px solid #1E5FA8;padding:3px 7px;border-radius:3px;white-space:nowrap;">${p.label}</span>`;
-    return `<span style="display:inline-flex;align-items:center;margin:0 12px 8px 0;"><img src="${src}" alt="${p.label}" height="22" style="display:block;height:22px;width:auto;max-width:100%;border:0;outline:none;"></span>`;
+    return `<span style="display:inline-block;line-height:0;margin:0 12px 8px 0;"><img src="${src}" alt="${p.label}" width="auto" height="22" style="display:block;height:22px;width:auto;max-width:80px;border:0;outline:none;"></span>`;
   }).join('');
 
   const logoStrip = productCount > 0 ? `<div style="display:flex;flex-wrap:wrap;align-items:center;padding-top:12px;margin-top:2px;border-top:1px solid #f0f4f8;margin-bottom:-8px;">${logoItems}</div>` : '';
@@ -443,7 +448,7 @@ function buildExecutive(name, titleV, phone, email, website, address, products, 
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
     if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;font-family:Arial,sans-serif;font-size:9px;font-weight:700;color:#1E5FA8;border:1px solid #bfdbfe;padding:2px 7px;border-radius:3px;white-space:nowrap;background:#eff6ff;">${p.label}</span>`;
-    return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;"><img src="${src}" alt="${p.label}" height="20" style="display:block;height:20px;width:auto;max-width:100%;border:0;outline:none;"></span>`;
+    return `<span style="display:inline-block;line-height:0;margin:0 10px 6px 0;"><img src="${src}" alt="${p.label}" width="auto" height="20" style="display:block;height:20px;width:auto;max-width:80px;border:0;outline:none;"></span>`;
   }).join('');
 
   const logoStrip = productCount > 0
@@ -490,7 +495,7 @@ function buildMinimal(name, titleV, phone, email, website, address, products, sh
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
     if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;font-family:Arial,sans-serif;font-size:9px;font-weight:700;color:#64748b;border:1px solid #e2e8f0;padding:2px 7px;border-radius:99px;white-space:nowrap;background:#f8fafc;">${p.label}</span>`;
-    return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;opacity:0.85;"><img src="${src}" alt="${p.label}" height="18" style="display:block;height:18px;width:auto;border:0;outline:none;"></span>`;
+    return `<span style="display:inline-block;line-height:0;margin:0 10px 6px 0;opacity:0.85;"><img src="${src}" alt="${p.label}" width="auto" height="18" style="display:block;height:18px;width:auto;max-width:70px;border:0;outline:none;"></span>`;
   }).join('');
 
   const logoStrip = productCount > 0
@@ -521,8 +526,8 @@ function buildMinimal(name, titleV, phone, email, website, address, products, sh
 }
 
 function buildSignatureHTML() {
-  const name    = document.getElementById('name').value.trim()    || 'Your Name';
-  const titleV  = document.getElementById('title').value.trim()   || 'Your Title';
+  const name    = document.getElementById('name').value.trim()    || '';
+  const titleV  = document.getElementById('title').value.trim()   || '';
   const phone   = document.getElementById('phone').value.trim();
   const email   = document.getElementById('email').value.trim();
   const website = document.getElementById('website').value.trim();
