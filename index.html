@@ -369,7 +369,7 @@ function buildDisclaimer(style) {
   ${style==='executive' ? `<div style="padding-top:10px;border-top:1px solid ${borderColor};">` : `<div style="border-top:1px solid ${borderColor};padding-top:10px;">`}
     <p style="font-family:Arial,sans-serif;font-size:9.5px;font-weight:700;color:#6b7280;margin:0 0 4px 0;text-transform:uppercase;letter-spacing:0.08em;">Confidentiality Notice &amp; Disclaimer</p>
     <p style="font-family:Arial,sans-serif;font-size:9.5px;color:#9ca3af;margin:0 0 5px 0;line-height:1.6;word-wrap:break-word;overflow-wrap:break-word;">This email and any attachments are intended solely for the use of the named addressee(s) and may contain information that is confidential, proprietary, or legally privileged. If you are not the intended recipient, you are hereby notified that any disclosure, copying, distribution, or use of the contents of this message is strictly prohibited. If you have received this communication in error, please notify the sender immediately and permanently delete this email and all copies from your system.</p>
-    <p style="font-family:Arial,sans-serif;font-size:9.5px;color:#9ca3af;margin:0;line-height:1.6;word-wrap:break-word;overflow-wrap:break-word;">PT. Piranti Teknologi Nusantara (PIRANUSA) does not accept liability for any loss or damage arising from the use of this email or its attachments, including but not limited to viruses, malware, or other harmful components. The views and opinions expressed in this email are those of the sender and do not necessarily reflect the official position of PT. Piranti Teknologi Nusantara. This email is not intended to constitute a legally binding agreement unless expressly stated and confirmed in writing by an authorised representative of the company.</p>
+    <p style="font-family:Arial,sans-serif;font-size:9.5px;color:#9ca3af;margin:0;line-height:1.6;word-wrap:break-word;overflow-wrap:break-word;">PT. Piranti Nusantara Teknologi (PIRANUSA) does not accept liability for any loss or damage arising from the use of this email or its attachments, including but not limited to viruses, malware, or other harmful components. The views and opinions expressed in this email are those of the sender and do not necessarily reflect the official position of PT. Piranti Nusantara Teknologi. This email is not intended to constitute a legally binding agreement unless expressly stated and confirmed in writing by an authorised representative of the company.</p>
   </div>
 </div>`;
 }
@@ -418,8 +418,7 @@ function buildClassic(name, titleV, phone, email, website, address, products, sh
       <div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:14px;padding-bottom:14px;border-bottom:1.5px solid #e8f0f8;">
         <div style="flex-shrink:0;padding-right:16px;padding-bottom:4px;">${piranusaImg}</div>
         <div style="border-left:1px solid #d1d5db;padding-left:16px;padding-bottom:4px;">
-          <span style="font-family:Arial,sans-serif;font-size:12px;color:#94a3b8;font-style:italic;">We Get IT Done</span>
-          <p style="font-family:Arial,sans-serif;font-size:10px;color:#cbd5e1;margin:2px 0 0 0;">PT. Piranti Teknologi Nusantara</p>
+          <p style="font-family:Arial,sans-serif;font-size:10px;color:#cbd5e1;margin:2px 0 0 0;">PT. Piranti Nusantara Teknologi</p>
         </div>
       </div>
       <table cellpadding="0" cellspacing="0" border="0" style="margin-bottom:${productCount>0?'12':'0'}px;max-width:100%;">${contactRows}</table>
@@ -467,8 +466,7 @@ function buildExecutive(name, titleV, phone, email, website, address, products, 
     <div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f0f4f8;">
       <div style="flex-shrink:0;padding-right:16px;padding-bottom:4px;">${piranusaImg}</div>
       <div style="border-left:1px solid #e2e8f0;padding-left:16px;padding-bottom:4px;">
-        <span style="font-family:Arial,sans-serif;font-size:12px;color:#94a3b8;font-style:italic;">We Get IT Done</span>
-        <p style="font-family:Arial,sans-serif;font-size:10px;color:#cbd5e1;margin:2px 0 0 0;">PT. Piranti Teknologi Nusantara</p>
+        <p style="font-family:Arial,sans-serif;font-size:10px;color:#cbd5e1;margin:2px 0 0 0;">PT. Piranti Nusantara Teknologi</p>
       </div>
     </div>
     <table cellpadding="0" cellspacing="0" border="0" style="max-width:100%;">${contactRows}</table>
@@ -510,10 +508,7 @@ function buildMinimal(name, titleV, phone, email, website, address, products, sh
   <p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#1E5FA8;text-transform:uppercase;letter-spacing:0.12em;margin:0 0 14px 0;">${titleV}</p>
   <div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #e2e8f0;">
     <div style="padding-right:14px;padding-bottom:4px;">${piranusaImg}</div>
-    <div style="padding-bottom:4px;">
-      <span style="font-family:Arial,sans-serif;font-size:11px;color:#94a3b8;font-style:italic;">We Get IT Done</span>
-    </div>
-  </div>
+</div>
   ${contactLine ? `<div style="margin-bottom:${address?'6':'0'}px;">${contactLine}</div>` : ''}
   ${address ? `<div style="display:flex;align-items:flex-start;">
     <span style="padding-right:6px;flex-shrink:0;">${iconImg(ICON_LOC,'top')}</span>
