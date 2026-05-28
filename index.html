@@ -194,11 +194,11 @@ const LOGO_DATA = {
   corona:       "https://i.imgur.com/Tz88PQA.png",
   piranusa:     "https://i.imgur.com/kZob7iU.png",
 };
-// FontAwesome icons replaced with SVG inline
+// FontAwesome icons replaced with text labels
 const ICON_PHONE = 'phone';
-const ICON_MAIL  = 'envelope';
-const ICON_WEB   = 'globe';
-const ICON_LOC   = 'location';
+const ICON_MAIL  = 'mail';
+const ICON_WEB   = 'web';
+const ICON_LOC   = 'loc';
 
 const DEFAULT_ON = ['zwcad','archicad','enscape','sketchup','d5render','zw3d','vray','microsoft365'];
 
@@ -338,14 +338,14 @@ function getCheckedProducts() {
 }
 
 function iconImg(iconType, valign) {
-  const icons = {
-    phone: '☎',
-    envelope: '✉',
-    globe: '🌐',
-    location: '📍',
+  const labels = {
+    phone: 'P:',
+    mail: 'E:',
+    web: 'W:',
+    loc: 'Address:',
   };
-  const icon = icons[iconType] || '';
-  return `<span style="display:inline-block;vertical-align:${valign||'middle'};margin-right:6px;color:#1E5FA8;font-size:14px;">${icon}</span>`;
+  const label = labels[iconType] || '';
+  return `<span style="display:inline;font-weight:bold;color:#1E5FA8;margin-right:6px;">${label}</span>`;
 }
 
 // ─── EVENT BANNER HTML BLOCK ─────────────────────────────────────────────────
@@ -397,10 +397,10 @@ function buildClassic(name, titleV, phone, email, website, address, products, sh
     : `<span style="font-family:Arial,sans-serif;font-size:20px;font-weight:900;color:#1E5FA8;">PIRANUSA</span>`;
 
   const contactRows = [
-    phone   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_PHONE)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${phone}</span></td></tr></table></td></tr>` : '',
-    email   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_MAIL)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${email}</span></td></tr></table></td></tr>` : '',
-    website ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_WEB)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${website}</span></td></tr></table></td></tr>` : '',
-    address ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:top;padding-top:2px;width:22px;text-align:center;">${iconImg(ICON_LOC,'top')}</td><td style="word-break:break-word;overflow-wrap:break-word;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${address}</span></td></tr></table></td></tr>` : '',
+    phone   ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:12.5px;">${iconImg(ICON_PHONE)} <span style="color:#4b5563;">${phone}</span></span></td></tr>` : '',
+    email   ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:12.5px;">${iconImg(ICON_MAIL)} <span style="color:#4b5563;">${email}</span></span></td></tr>` : '',
+    website ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:12.5px;">${iconImg(ICON_WEB)} <span style="color:#4b5563;">${website}</span></span></td></tr>` : '',
+    address ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:12.5px;">${iconImg(ICON_LOC)} <span style="color:#4b5563;">${address}</span></span></td></tr>` : '',
   ].filter(Boolean).join('');
 
   const logoItems = products.map(p => {
@@ -442,10 +442,10 @@ function buildExecutive(name, titleV, phone, email, website, address, products, 
     : `<span style="font-family:Arial,sans-serif;font-size:18px;font-weight:900;color:white;">PIRANUSA</span>`;
 
   const contactRows = [
-    phone   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_PHONE)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${phone}</span></td></tr></table></td></tr>` : '',
-    email   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_MAIL)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${email}</span></td></tr></table></td></tr>` : '',
-    website ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_WEB)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${website}</span></td></tr></table></td></tr>` : '',
-    address ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:top;padding-top:2px;width:22px;text-align:center;">${iconImg(ICON_LOC,'top')}</td><td style="word-break:break-word;overflow-wrap:break-word;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${address}</span></td></tr></table></td></tr>` : '',
+    phone   ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:12.5px;">${iconImg(ICON_PHONE)} <span style="color:#374151;">${phone}</span></span></td></tr>` : '',
+    email   ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:12.5px;">${iconImg(ICON_MAIL)} <span style="color:#374151;">${email}</span></span></td></tr>` : '',
+    website ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:12.5px;">${iconImg(ICON_WEB)} <span style="color:#374151;">${website}</span></span></td></tr>` : '',
+    address ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:12.5px;">${iconImg(ICON_LOC)} <span style="color:#374151;">${address}</span></span></td></tr>` : '',
   ].filter(Boolean).join('');
 
   const logoItems = products.map(p => {
@@ -514,10 +514,7 @@ function buildMinimal(name, titleV, phone, email, website, address, products, sh
     <div style="padding-right:14px;padding-bottom:4px;">${piranusaImg}</div>
 </div>
   ${contactLine ? `<div style="margin-bottom:${address?'6':'0'}px;">${contactLine}</div>` : ''}
-  ${address ? `<div style="display:flex;align-items:flex-start;">
-    <span style="padding-right:6px;flex-shrink:0;">${iconImg(ICON_LOC,'top')}</span>
-    <span style="font-family:Arial,sans-serif;font-size:12px;color:#64748b;">${address}</span>
-  </div>` : ''}
+  ${address ? `<div style="margin-top:6px;"><span style="font-family:Arial,sans-serif;font-size:12px;">${iconImg(ICON_LOC)} <span style="color:#64748b;">${address}</span></span></div>` : ''}
   ${logoStrip}
   ${banners}
   ${disc}
