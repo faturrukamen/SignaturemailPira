@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Piranusa Email Signature Generator</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Segoe UI',Arial,sans-serif; background:#f5f5f5; min-height:100vh; }
@@ -194,10 +195,11 @@ const LOGO_DATA = {
   corona:       "https://i.imgur.com/87fZI82.png",
   piranusa:     "https://i.imgur.com/TOHwiSw.png",
 };
-const ICON_PHONE = "https://raw.githubusercontent.com/faturrukamen/SignaturemailPira/main/icons/phone.png";
-const ICON_MAIL  = "https://raw.githubusercontent.com/faturrukamen/SignaturemailPira/main/icons/mail.png";
-const ICON_WEB   = "https://raw.githubusercontent.com/faturrukamen/SignaturemailPira/main/icons/web.png";
-const ICON_LOC   = "https://raw.githubusercontent.com/faturrukamen/SignaturemailPira/main/icons/location.png";
+// FontAwesome icons (no longer using image files)
+const ICON_PHONE = 'fa-phone';
+const ICON_MAIL  = 'fa-envelope';
+const ICON_WEB   = 'fa-globe';
+const ICON_LOC   = 'fa-map-marker-alt';
 
 const DEFAULT_ON = ['zwcad','archicad','enscape','sketchup','d5render','zw3d','vray','microsoft365'];
 
@@ -340,8 +342,8 @@ function getCheckedProducts() {
   return PRODUCTS.filter(p => document.getElementById('prod-'+p.id)?.checked);
 }
 
-function iconImg(src, valign) {
-  return `<img src="${src}" width="16" height="16" style="display:inline-block;vertical-align:${valign||'middle'};border:0;outline:none;">`;
+function iconImg(iconClass, valign) {
+  return `<i class="fas ${iconClass}" style="display:inline-block;vertical-align:${valign||'middle'};color:#1E5FA8;font-size:13px;width:16px;text-align:center;"></i>`;
 }
 
 // ─── EVENT BANNER HTML BLOCK ─────────────────────────────────────────────────
@@ -402,7 +404,7 @@ function buildClassic(name, titleV, phone, email, website, address, products, sh
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
     if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 12px 8px 0;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#1E5FA8;border:1.5px solid #1E5FA8;padding:3px 7px;border-radius:3px;white-space:nowrap;">${p.label}</span>`;
-    return `<span style="display:inline-block;line-height:0;margin:0 12px 8px 0;"><img src="${src}" alt="${p.label}" height="22" style="display:block;height:22px;width:auto;max-width:90px;object-fit:contain;border:0;outline:none;"></span>`;
+    return `<span style="display:inline-flex;align-items:center;justify-content:center;line-height:0;margin:0 12px 8px 0;height:22px;"><img src="${src}" alt="${p.label}" style="display:block;height:22px;width:auto;max-width:90px;border:0;outline:none;"></span>`;
   }).join('');
 
   const logoStrip = productCount > 0 ? `<div style="padding-top:12px;margin-top:2px;border-top:1px solid #f0f4f8;margin-bottom:-8px;line-height:1;">${logoItems}</div>` : '';
@@ -447,7 +449,7 @@ function buildExecutive(name, titleV, phone, email, website, address, products, 
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
     if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;font-family:Arial,sans-serif;font-size:9px;font-weight:700;color:#1E5FA8;border:1px solid #bfdbfe;padding:2px 7px;border-radius:3px;white-space:nowrap;background:#eff6ff;">${p.label}</span>`;
-    return `<span style="display:inline-block;line-height:0;margin:0 10px 6px 0;"><img src="${src}" alt="${p.label}" height="20" style="display:block;height:20px;width:auto;max-width:90px;object-fit:contain;border:0;outline:none;"></span>`;
+    return `<span style="display:inline-flex;align-items:center;justify-content:center;line-height:0;margin:0 10px 6px 0;height:20px;"><img src="${src}" alt="${p.label}" style="display:block;height:20px;width:auto;max-width:90px;border:0;outline:none;"></span>`;
   }).join('');
 
   const logoStrip = productCount > 0
@@ -493,7 +495,7 @@ function buildMinimal(name, titleV, phone, email, website, address, products, sh
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
     if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;font-family:Arial,sans-serif;font-size:9px;font-weight:700;color:#64748b;border:1px solid #e2e8f0;padding:2px 7px;border-radius:99px;white-space:nowrap;background:#f8fafc;">${p.label}</span>`;
-    return `<span style="display:inline-block;line-height:0;margin:0 10px 6px 0;opacity:0.85;"><img src="${src}" alt="${p.label}" height="18" style="display:block;height:18px;width:auto;max-width:80px;object-fit:contain;border:0;outline:none;"></span>`;
+    return `<span style="display:inline-flex;align-items:center;justify-content:center;line-height:0;margin:0 10px 6px 0;height:18px;opacity:0.85;"><img src="${src}" alt="${p.label}" style="display:block;height:18px;width:auto;max-width:80px;border:0;outline:none;"></span>`;
   }).join('');
 
   const logoStrip = productCount > 0
