@@ -184,16 +184,16 @@
 
 <script>
 const LOGO_DATA = {
-  zwcad:        "https://pira.click/qlKLl",
-  archicad:     "https://pira.click/GqinV",
-  enscape:      "https://pira.click/cE5FW",
-  sketchup:     "https://pira.click/ocveH",
-  d5render:     "https://pira.click/zr9Wi",
-  zw3d:         "https://pira.click/XssMg",
-  vray:         "https://pira.click/vOUFs",
-  microsoft365: "https://pira.click/fwI5e",
-  corona:       "https://pira.click/D9i6p",
-  piranusa:     "https://pira.click/6Yjpj",
+  zwcad:        "https://i.imgur.com/P1fzcnI.png",
+  archicad:     "https://i.imgur.com/3QIviSe.png",
+  enscape:      "https://i.imgur.com/Z8Cm3f7.png",
+  sketchup:     "https://i.imgur.com/gvl99az.png",
+  d5render:     "https://i.imgur.com/JfFY8T1.png",
+  zw3d:         "https://i.imgur.com/OFnNKHb.png",
+  vray:         "https://i.imgur.com/C7uuN0s.png",
+  microsoft365: "https://i.imgur.com/JFMwjon.png",
+  corona:       "https://i.imgur.com/Tz88PQA.png",
+  piranusa:     "https://i.imgur.com/kZob7iU.png",
 };
 // FontAwesome icons (no longer using image files)
 const ICON_PHONE = 'fa-phone';
@@ -286,16 +286,12 @@ function buildProducts() {
   });
 
   grid.innerHTML = PRODUCTS.map(p => {
-    const logoSrc = LOGO_DATA[p.id] || '';
-    const thumb = logoSrc
-      ? `<img src="${logoSrc}" alt="${p.label}" class="product-logo-preview">`
-      : `<span style="font-size:11px;font-weight:600;">${p.label}</span>`;
     const isChecked = checkedState[p.id];
     return `<div class="product-card" draggable="true" data-id="${p.id}">
       <div class="drag-handle" title="Drag untuk reorder">${DRAG_HANDLE_SVG}</div>
       <label class="product-toggle" onclick="event.stopPropagation()">
         <input type="checkbox" id="prod-${p.id}" ${isChecked?'checked':''} onchange="updatePreview()">
-        <span class="check">✓</span>${thumb}
+        <span class="check">✓</span><span style="font-size:12px;color:#374151;">${p.label}</span>
       </label>
     </div>`;
   }).join('');
