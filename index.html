@@ -407,14 +407,14 @@ function buildClassic(name, titleV, phone, email, website, address, products, sh
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
     if (!src) return `<span style="display:inline-block;vertical-align:middle;padding:0 10px 8px 0;"><span style="font-family:Arial,sans-serif;font-size:0.625em;font-weight:700;color:#1E5FA8;border:1.5px solid #1E5FA8;padding:3px 7px;border-radius:3px;white-space:nowrap;">${p.label}</span></span>`;
-    return `<span style="display:inline-block;vertical-align:middle;padding:0 10px 8px 0;"><img src="${src}" alt="${p.label}" height="22" style="display:block;height:1.1em;width:auto;border:0;outline:none;"></span>`;
+    return `<span style="display:inline-block;vertical-align:middle;padding:0 10px 8px 0;"><span style="display:inline-block;background:#ffffff;border-radius:3px;padding:2px 4px;"><img src="${src}" alt="${p.label}" height="22" style="display:block;height:1.1em;width:auto;border:0;outline:none;"></span></span>`;
   }).join('');
 
   const logoStrip = productCount > 0 ? `<div style="padding-top:12px;margin-top:2px;border-top:1px solid #f0f4f8;max-width:100%;line-height:2.4em;">${logoItems}</div>` : '';
   const disc = showDisc ? buildDisclaimer('classic') : '';
   const banners = buildEventBannersHTML(eventBanners);
 
-  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;font-size:20px;" data-sig-width="responsive" data-product-count="${productCount}">
+  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;font-size:20px;background-color:#ffffff;" data-sig-width="responsive" data-product-count="${productCount}">
   <div style="display:flex;max-width:100%;box-sizing:border-box;">
     <div style="width:5px;min-width:5px;background:linear-gradient(180deg,#1E5FA8 0%,#38bdf8 100%);border-radius:4px;flex-shrink:0;margin-right:18px;"></div>
     <div style="flex:1;min-width:0;padding:2px 0;">
@@ -452,16 +452,16 @@ function buildExecutive(name, titleV, phone, email, website, address, products, 
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
     if (!src) return `<span style="display:inline-block;vertical-align:middle;padding:0 8px 6px 0;"><span style="font-family:Arial,sans-serif;font-size:0.5625em;font-weight:700;color:#1E5FA8;border:1px solid #bfdbfe;padding:2px 7px;border-radius:3px;white-space:nowrap;background:#eff6ff;">${p.label}</span></span>`;
-    return `<span style="display:inline-block;vertical-align:middle;padding:0 8px 6px 0;"><img src="${src}" alt="${p.label}" height="20" style="display:block;height:1em;width:auto;border:0;outline:none;"></span>`;
+    return `<span style="display:inline-block;vertical-align:middle;padding:0 8px 6px 0;"><span style="display:inline-block;background:#ffffff;border-radius:3px;padding:2px 4px;"><img src="${src}" alt="${p.label}" height="20" style="display:block;height:1em;width:auto;border:0;outline:none;"></span></span>`;
   }).join('');
 
   const logoStrip = productCount > 0
-    ? `<div style="padding:12px 20px 8px;border-top:1px solid #f0f4f8;max-width:100%;line-height:2.2em;">${logoItems}</div>`
+    ? `<div style="padding:12px 20px 8px;border-top:1px solid #f0f4f8;max-width:100%;line-height:2.2em;background-color:#ffffff;">${logoItems}</div>`
     : '';
   const disc = showDisc ? buildDisclaimer('executive') : '';
   const banners = buildEventBannersHTML(eventBanners);
 
-  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;border-radius:6px;border:1px solid #e2e8f0;font-size:20px;" data-sig-width="responsive" data-product-count="${productCount}">
+  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;border-radius:6px;border:1px solid #e2e8f0;font-size:20px;background-color:#ffffff;" data-sig-width="responsive" data-product-count="${productCount}">
   <div style="background:linear-gradient(135deg,#0a1f44 0%,#1E5FA8 60%,#2d7dd2 100%);padding:18px 20px 16px;box-sizing:border-box;border-radius:6px 6px 0 0;">
     <p style="font-family:Arial,sans-serif;font-size:1.3em;font-weight:800;color:#ffffff;margin:0 0 2px 0;letter-spacing:-0.3px;">${name}</p>
     <p style="font-family:Arial,sans-serif;font-size:0.625em;font-weight:600;color:#93c5fd;text-transform:uppercase;letter-spacing:0.14em;margin:0;">${titleV}</p>
@@ -498,7 +498,7 @@ function buildMinimal(name, titleV, phone, email, website, address, products, sh
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
     if (!src) return `<span style="display:inline-block;vertical-align:middle;padding:0 8px 6px 0;"><span style="font-family:Arial,sans-serif;font-size:0.5625em;font-weight:700;color:#64748b;border:1px solid #e2e8f0;padding:2px 7px;border-radius:99px;white-space:nowrap;background:#f8fafc;">${p.label}</span></span>`;
-    return `<span style="display:inline-block;vertical-align:middle;padding:0 8px 6px 0;"><img src="${src}" alt="${p.label}" height="16" style="display:block;height:0.8em;width:auto;border:0;outline:none;opacity:0.85;"></span>`;
+    return `<span style="display:inline-block;vertical-align:middle;padding:0 8px 6px 0;"><span style="display:inline-block;background:#ffffff;border-radius:3px;padding:2px 4px;"><img src="${src}" alt="${p.label}" height="16" style="display:block;height:0.8em;width:auto;border:0;outline:none;opacity:0.85;"></span></span>`;
   }).join('');
 
   const logoStrip = productCount > 0
@@ -507,7 +507,7 @@ function buildMinimal(name, titleV, phone, email, website, address, products, sh
   const disc = showDisc ? buildDisclaimer('minimal') : '';
   const banners = buildEventBannersHTML(eventBanners);
 
-  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);border-radius:6px;padding:20px 22px 18px;border:1px solid #e2e8f0;font-size:20px;" data-sig-width="responsive" data-product-count="${productCount}">
+  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;background-color:#ffffff;border-radius:6px;padding:20px 22px 18px;border:1px solid #e2e8f0;font-size:20px;" data-sig-width="responsive" data-product-count="${productCount}">
   <p style="font-family:Arial,sans-serif;font-size:1.25em;font-weight:800;color:#0f172a;margin:0 0 2px 0;letter-spacing:-0.3px;">${name}</p>
   <div style="height:2px;background:linear-gradient(90deg,#1E5FA8 0%,#38bdf8 60%,transparent 100%);margin-bottom:6px;border-radius:2px;max-width:180px;"></div>
   <p style="font-family:Arial,sans-serif;font-size:0.625em;font-weight:700;color:#1E5FA8;text-transform:uppercase;letter-spacing:0.12em;margin:0 0 14px 0;">${titleV}</p>
