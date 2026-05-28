@@ -35,9 +35,14 @@
   .btn-generate { width:100%; padding:11px; background:#1e5fa8; color:white; border:none; border-radius:7px; font-size:14px; font-weight:600; cursor:pointer; margin-top:22px; }
   .btn-generate:hover { background:#1a529d; }
   .preview-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af; margin-bottom:14px; }
-  .preview-wrapper { background:white; border-radius:10px; box-shadow:0 1px 4px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04); margin-bottom:18px; }
-  .preview-topbar { background:#f3f4f6; padding:8px 16px; font-size:12px; color:#6b7280; border-bottom:1px solid #e5e7eb; border-radius:10px 10px 0 0; }
+  .preview-wrapper { background:white; border-radius:10px; box-shadow:0 1px 4px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04); margin-bottom:18px; transition:background 0.2s; }
+  .preview-wrapper.dark-mode { background:#1a1a1a; }
+  .preview-topbar { background:#f3f4f6; padding:8px 16px; font-size:12px; color:#6b7280; border-bottom:1px solid #e5e7eb; border-radius:10px 10px 0 0; display:flex; align-items:center; justify-content:space-between; transition:background 0.2s,color 0.2s,border-color 0.2s; }
+  .preview-wrapper.dark-mode .preview-topbar { background:#2a2a2a; color:#9ca3af; border-color:#3a3a3a; }
   .preview-topbar::before { content:'✦ '; font-size:10px; color:#9ca3af; }
+  .dark-toggle { display:flex; align-items:center; gap:5px; background:none; border:1.5px solid #e5e7eb; border-radius:99px; padding:3px 10px 3px 7px; font-size:11px; font-weight:600; color:#6b7280; cursor:pointer; transition:all 0.15s; white-space:nowrap; }
+  .dark-toggle:hover { border-color:#1e5fa8; color:#1e5fa8; }
+  .preview-wrapper.dark-mode .dark-toggle { border-color:#555; color:#aaa; background:#333; }
   .preview-body { padding:24px 28px; overflow-x:auto; }
   .preview-body > div { width:100%; box-sizing:border-box; }
   .copy-section { display:flex; gap:10px; margin-top:4px; }
@@ -165,8 +170,11 @@
         <span class="style-desc">Background ice blue</span>
       </button>
     </div>
-    <div class="preview-wrapper">
-      <div class="preview-topbar">Email Signature Preview</div>
+    <div class="preview-wrapper" id="preview-wrapper">
+      <div class="preview-topbar">
+        <span>Email Signature Preview</span>
+        <button class="dark-toggle" onclick="toggleDarkPreview()" id="dark-toggle-btn">☀️ Light</button>
+      </div>
       <div class="preview-body"><div id="signature-preview"></div></div>
     </div>
     <div class="copy-section">
@@ -381,6 +389,15 @@ function buildDisclaimer(style) {
 
 // ─── STYLE BUILDERS ──────────────────────────────────────────────────────────
 let currentStyle = 'classic';
+
+let isDarkPreview = false;
+function toggleDarkPreview() {
+  isDarkPreview = !isDarkPreview;
+  const wrapper = document.getElementById('preview-wrapper');
+  const btn = document.getElementById('dark-toggle-btn');
+  wrapper.classList.toggle('dark-mode', isDarkPreview);
+  btn.textContent = isDarkPreview ? '🌙 Dark' : '☀️ Light';
+}
 
 function setStyle(style) {
   currentStyle = style;
