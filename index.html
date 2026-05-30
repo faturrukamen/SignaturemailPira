@@ -8,7 +8,7 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Segoe UI',Arial,sans-serif; background:#f5f5f5; min-height:100vh; }
   .app-header { background:#1a1a2e; color:white; padding:20px 30px; }
-  .app-header h1 { font-size:20px; font-weight:600; }
+  .app-header h1 { font-size:15px; font-weight:600; }
   .app-header p { font-size:13px; opacity:0.7; margin-top:2px; }
   .container { display:flex; min-height:calc(100vh - 72px); }
   .left-panel { width:360px; min-width:360px; background:white; padding:28px 24px; border-right:1px solid #e5e7eb; overflow-y:auto; }
@@ -432,7 +432,7 @@ function buildClassic(name, titleV, phone, email, website, address, products, sh
   const disc = showDisc ? buildDisclaimer('classic') : '';
   const banners = buildEventBannersHTML(eventBanners);
 
-  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;font-size:20px;background-color:#ffffff;padding:20px 22px 18px;" data-sig-width="responsive" data-product-count="${productCount}">
+  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;font-size:15px;background-color:#ffffff;padding:20px 22px 18px;" data-sig-width="responsive" data-product-count="${productCount}">
   <div style="display:flex;max-width:100%;box-sizing:border-box;">
     <div style="width:5px;min-width:5px;background:linear-gradient(180deg,#1E5FA8 0%,#38bdf8 100%);border-radius:4px;flex-shrink:0;margin-right:18px;"></div>
     <div style="flex:1;min-width:0;padding:2px 0;">
@@ -479,7 +479,7 @@ function buildExecutive(name, titleV, phone, email, website, address, products, 
   const disc = showDisc ? buildDisclaimer('executive') : '';
   const banners = buildEventBannersHTML(eventBanners);
 
-  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;border-radius:6px;border:1px solid #e2e8f0;font-size:20px;background-color:#ffffff;" data-sig-width="responsive" data-product-count="${productCount}">
+  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;border-radius:6px;border:1px solid #e2e8f0;font-size:15px;background-color:#ffffff;" data-sig-width="responsive" data-product-count="${productCount}">
   <div style="background:linear-gradient(135deg,#0a1f44 0%,#1E5FA8 60%,#2d7dd2 100%);padding:18px 20px 16px;box-sizing:border-box;border-radius:6px 6px 0 0;">
     <p style="font-family:Arial,sans-serif;font-size:1.3em;font-weight:800;color:#ffffff;margin:0 0 2px 0;letter-spacing:-0.3px;">${name}</p>
     <p style="font-family:Arial,sans-serif;font-size:0.625em;font-weight:600;color:#93c5fd;text-transform:uppercase;letter-spacing:0.14em;margin:0;">${titleV}</p>
@@ -525,7 +525,7 @@ function buildMinimal(name, titleV, phone, email, website, address, products, sh
   const disc = showDisc ? buildDisclaimer('minimal') : '';
   const banners = buildEventBannersHTML(eventBanners);
 
-  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;background-color:#ffffff;border-radius:6px;padding:20px 22px 18px;border:1px solid #e2e8f0;font-size:20px;" data-sig-width="responsive" data-product-count="${productCount}">
+  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;background-color:#ffffff;border-radius:6px;padding:20px 22px 18px;border:1px solid #e2e8f0;font-size:15px;" data-sig-width="responsive" data-product-count="${productCount}">
   <p style="font-family:Arial,sans-serif;font-size:1.25em;font-weight:800;color:#0f172a;margin:0 0 2px 0;letter-spacing:-0.3px;">${name}</p>
   <div style="height:2px;background:linear-gradient(90deg,#1E5FA8 0%,#38bdf8 60%,transparent 100%);margin-bottom:6px;border-radius:2px;max-width:180px;"></div>
   <p style="font-family:Arial,sans-serif;font-size:0.625em;font-weight:700;color:#1E5FA8;text-transform:uppercase;letter-spacing:0.12em;margin:0 0 14px 0;">${titleV}</p>
