@@ -35,9 +35,15 @@
   .btn-generate { width:100%; padding:11px; background:#1e5fa8; color:white; border:none; border-radius:7px; font-size:14px; font-weight:600; cursor:pointer; margin-top:22px; }
   .btn-generate:hover { background:#1a529d; }
   .preview-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af; margin-bottom:14px; }
-  .preview-wrapper { background:white; border-radius:10px; box-shadow:0 1px 4px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04); margin-bottom:18px; }
-  .preview-topbar { background:#f3f4f6; padding:8px 16px; font-size:12px; color:#6b7280; border-bottom:1px solid #e5e7eb; border-radius:10px 10px 0 0; }
+  .preview-wrapper { background:white; border-radius:10px; box-shadow:0 1px 4px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04); margin-bottom:18px; transition:background 0.2s; }
+  .preview-wrapper.dark-mode { background:#1a1a1a; }
+  .preview-topbar { background:#f3f4f6; padding:8px 16px; font-size:12px; color:#6b7280; border-bottom:1px solid #e5e7eb; border-radius:10px 10px 0 0; display:flex; align-items:center; justify-content:space-between; transition:background 0.2s,color 0.2s,border-color 0.2s; }
+  .preview-wrapper.dark-mode .preview-topbar { background:#2a2a2a; color:#9ca3af; border-color:#3a3a3a; }
   .preview-topbar::before { content:'✦ '; font-size:10px; color:#9ca3af; }
+  .dark-toggle { display:flex; align-items:center; gap:5px; background:none; border:1.5px solid #e5e7eb; border-radius:99px; padding:3px 10px 3px 7px; font-size:11px; font-weight:600; color:#6b7280; cursor:pointer; transition:all 0.15s; white-space:nowrap; }
+  .dark-toggle:hover { border-color:#1e5fa8; color:#1e5fa8; }
+  .preview-wrapper.dark-mode .dark-toggle { border-color:#555; color:#aaa; background:#333; }
+  .preview-wrapper.dark-mode .preview-body { padding:32px 40px; }
   .preview-body { padding:24px 28px; overflow-x:auto; }
   .preview-body > div { width:100%; box-sizing:border-box; }
   .copy-section { display:flex; gap:10px; margin-top:4px; }
@@ -94,13 +100,14 @@
     .right-panel { padding:16px; }
     .products-grid { grid-template-columns:1fr; }
     .copy-section { flex-direction:column; }
-    .preview-body { padding:14px 12px; }
+    .preview-body { padding:18px 14px; }
     .instructions { font-size:11px; }
+    .preview-body p { font-size:18px !important; }
   }
   @media (max-width:480px) {
     .app-header h1 { font-size:14px; }
     .right-panel { padding:12px 10px; }
-    .preview-body { padding:10px 8px; }
+    .preview-body { padding:16px 12px; }
     .style-switcher { gap:5px; }
     .style-btn { padding:7px 4px 8px; }
     .style-btn .style-name { font-size:10px; }
@@ -164,8 +171,11 @@
         <span class="style-desc">Background ice blue</span>
       </button>
     </div>
-    <div class="preview-wrapper">
-      <div class="preview-topbar">Email Signature Preview</div>
+    <div class="preview-wrapper" id="preview-wrapper">
+      <div class="preview-topbar">
+        <span>Email Signature Preview</span>
+        <button class="dark-toggle" onclick="toggleDarkPreview()" id="dark-toggle-btn">☀️ Light</button>
+      </div>
       <div class="preview-body"><div id="signature-preview"></div></div>
     </div>
     <div class="copy-section">
@@ -183,23 +193,24 @@
 
 <script>
 const LOGO_DATA = {
-  zwcad:        "https://i.imgur.com/emblfNf.png",
-  archicad:     "https://i.imgur.com/bXIJblF.png",
-  enscape:      "https://i.imgur.com/3vpE3PY.png",
-  sketchup:     "https://i.imgur.com/5lS937J.png",
-  d5render:     "https://i.imgur.com/Pe2b4wO.png",
-  zw3d:         "https://i.imgur.com/MhJ9e1g.png",
-  vray:         "https://i.imgur.com/EU4HSFL.png",
-  microsoft365: "https://i.imgur.com/sFa9ohF.png",
-  corona:       "https://i.imgur.com/87fZI82.png",
-  piranusa:     "https://i.imgur.com/TOHwiSw.png",
+  zwcad:        "https://i.imgur.com/P1fzcnI.png",
+  archicad:     "https://i.imgur.com/3QIviSe.png",
+  enscape:      "https://i.imgur.com/Z8Cm3f7.png",
+  sketchup:     "https://i.imgur.com/gvl99az.png",
+  d5render:     "https://i.imgur.com/JfFY8T1.png",
+  zw3d:         "https://i.imgur.com/OFnNKHb.png",
+  vray:         "https://i.imgur.com/C7uuN0s.png",
+  microsoft365: "https://i.imgur.com/JFMwjon.png",
+  corona:       "https://i.imgur.com/Tz88PQA.png",
+  piranusa:     "https://i.imgur.com/kZob7iU.png",
 };
-const ICON_PHONE = "https://raw.githubusercontent.com/faturrukamen/SignaturemailPira/main/icons/phone.png";
-const ICON_MAIL  = "https://raw.githubusercontent.com/faturrukamen/SignaturemailPira/main/icons/mail.png";
-const ICON_WEB   = "https://raw.githubusercontent.com/faturrukamen/SignaturemailPira/main/icons/web.png";
-const ICON_LOC   = "https://raw.githubusercontent.com/faturrukamen/SignaturemailPira/main/icons/location.png";
+// FontAwesome icons replaced with text labels
+const ICON_PHONE = 'phone';
+const ICON_MAIL  = 'mail';
+const ICON_WEB   = 'web';
+const ICON_LOC   = 'loc';
 
-const DEFAULT_ON = ['zwcad','archicad','enscape','sketchup','d5render','zw3d','vray','microsoft365'];
+const DEFAULT_ON = ['zwcad','archicad','enscape','sketchup','d5render','zw3d','vray','microsoft365','corona','piranusa'];
 
 let PRODUCTS = [
   { id:'zwcad',        label:'ZWCAD' },
@@ -284,16 +295,12 @@ function buildProducts() {
   });
 
   grid.innerHTML = PRODUCTS.map(p => {
-    const logoSrc = LOGO_DATA[p.id] || '';
-    const thumb = logoSrc
-      ? `<img src="${logoSrc}" alt="${p.label}" class="product-logo-preview">`
-      : `<span style="font-size:11px;font-weight:600;">${p.label}</span>`;
     const isChecked = checkedState[p.id];
     return `<div class="product-card" draggable="true" data-id="${p.id}">
       <div class="drag-handle" title="Drag untuk reorder">${DRAG_HANDLE_SVG}</div>
       <label class="product-toggle" onclick="event.stopPropagation()">
         <input type="checkbox" id="prod-${p.id}" ${isChecked?'checked':''} onchange="updatePreview()">
-        <span class="check">✓</span>${thumb}
+        <span class="check">✓</span><span style="font-size:12px;color:#374151;">${p.label}</span>
       </label>
     </div>`;
   }).join('');
@@ -340,8 +347,15 @@ function getCheckedProducts() {
   return PRODUCTS.filter(p => document.getElementById('prod-'+p.id)?.checked);
 }
 
-function iconImg(src, valign) {
-  return `<img src="${src}" width="16" height="16" style="display:inline-block;vertical-align:${valign||'middle'};border:0;outline:none;">`;
+function iconImg(iconType, valign) {
+  const labels = {
+    phone: 'P:',
+    mail: 'E:',
+    web: 'W:',
+    loc: 'Address:',
+  };
+  const label = labels[iconType] || '';
+  return `<span style="display:inline;font-weight:bold;color:#1E5FA8;margin-right:6px;">${label}</span>`;
 }
 
 // ─── EVENT BANNER HTML BLOCK ─────────────────────────────────────────────────
@@ -377,6 +391,15 @@ function buildDisclaimer(style) {
 // ─── STYLE BUILDERS ──────────────────────────────────────────────────────────
 let currentStyle = 'classic';
 
+let isDarkPreview = false;
+function toggleDarkPreview() {
+  isDarkPreview = !isDarkPreview;
+  const wrapper = document.getElementById('preview-wrapper');
+  const btn = document.getElementById('dark-toggle-btn');
+  wrapper.classList.toggle('dark-mode', isDarkPreview);
+  btn.textContent = isDarkPreview ? '🌙 Dark' : '☀️ Light';
+}
+
 function setStyle(style) {
   currentStyle = style;
   ['classic','executive','minimal'].forEach(s => {
@@ -389,44 +412,44 @@ function buildClassic(name, titleV, phone, email, website, address, products, sh
   const productCount = products.length;
   const piranusaSrc = LOGO_DATA['piranusa'];
   const piranusaImg = piranusaSrc
-    ? `<img src="${piranusaSrc}" alt="PIRANUSA" height="32" style="display:block;height:32px;width:auto;border:0;outline:none;">`
-    : `<span style="font-family:Arial,sans-serif;font-size:16px;font-weight:900;color:#1E5FA8;">PIRANUSA</span>`;
+    ? `<img src="${piranusaSrc}" alt="PIRANUSA" height="40" style="display:block;height:2.5em;width:auto;max-width:160px;border:0;outline:none;">`
+    : `<span style="font-family:Arial,sans-serif;font-size:1.25em;font-weight:900;color:#1E5FA8;">PIRANUSA</span>`;
 
   const contactRows = [
-    phone   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_PHONE)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${phone}</span></td></tr></table></td></tr>` : '',
-    email   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_MAIL)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${email}</span></td></tr></table></td></tr>` : '',
-    website ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_WEB)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${website}</span></td></tr></table></td></tr>` : '',
-    address ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:top;padding-top:2px;width:22px;text-align:center;">${iconImg(ICON_LOC,'top')}</td><td style="word-break:break-word;overflow-wrap:break-word;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${address}</span></td></tr></table></td></tr>` : '',
+    phone   ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:0.78em;">${iconImg(ICON_PHONE)} <span style="color:#4b5563;">${phone}</span></span></td></tr>` : '',
+    email   ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:0.78em;">${iconImg(ICON_MAIL)} <span style="color:#4b5563;">${email}</span></span></td></tr>` : '',
+    website ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:0.78em;">${iconImg(ICON_WEB)} <span style="color:#4b5563;">${website}</span></span></td></tr>` : '',
+    address ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:0.78em;color:#4b5563;">${address}</span></td></tr>` : '',
   ].filter(Boolean).join('');
 
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
-    if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 12px 8px 0;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#1E5FA8;border:1.5px solid #1E5FA8;padding:3px 7px;border-radius:3px;white-space:nowrap;">${p.label}</span>`;
-    return `<span style="display:inline-block;line-height:0;margin:0 10px 8px 0;"><img src="${src}" alt="${p.label}" height="16" style="display:block;height:16px;width:auto;max-width:70px;object-fit:contain;border:0;outline:none;"></span>`;
+    if (!src) return `<span style="display:inline-block;vertical-align:middle;padding:0 10px 8px 0;"><span style="font-family:Arial,sans-serif;font-size:0.625em;font-weight:700;color:#1E5FA8;border:1.5px solid #1E5FA8;padding:3px 7px;border-radius:3px;white-space:nowrap;">${p.label}</span></span>`;
+    return `<span style="display:inline-block;vertical-align:middle;padding:0 10px 8px 0;"><span style="display:inline-block;background:#ffffff;border-radius:3px;padding:2px 4px;"><img src="${src}" alt="${p.label}" height="22" style="display:block;height:1.1em;width:auto;border:0;outline:none;"></span></span>`;
   }).join('');
 
-  const logoStrip = productCount > 0 ? `<div style="padding-top:12px;margin-top:2px;border-top:1px solid #f0f4f8;margin-bottom:-8px;line-height:1;">${logoItems}</div>` : '';
+  const logoStrip = productCount > 0 ? `<div style="padding-top:12px;margin-top:2px;border-top:1px solid #f0f4f8;max-width:100%;line-height:2.4em;">${logoItems}</div>` : '';
   const disc = showDisc ? buildDisclaimer('classic') : '';
   const banners = buildEventBannersHTML(eventBanners);
 
-  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;" data-sig-width="responsive" data-product-count="${productCount}">
+  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;font-size:20px;background-color:#ffffff;padding:20px 22px 18px;" data-sig-width="responsive" data-product-count="${productCount}">
   <div style="display:flex;max-width:100%;box-sizing:border-box;">
     <div style="width:5px;min-width:5px;background:linear-gradient(180deg,#1E5FA8 0%,#38bdf8 100%);border-radius:4px;flex-shrink:0;margin-right:18px;"></div>
     <div style="flex:1;min-width:0;padding:2px 0;">
-      <p style="font-family:Arial,sans-serif;font-size:16px;font-weight:800;color:#0f172a;margin:0 0 1px 0;letter-spacing:-0.3px;">${name}</p>
-      <p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#1E5FA8;text-transform:uppercase;letter-spacing:0.1em;margin:0 0 12px 0;">${titleV}</p>
+      <p style="font-family:Arial,sans-serif;font-size:1.3em;font-weight:800;color:#0f172a;margin:0 0 1px 0;letter-spacing:-0.3px;line-height:1.2;">${name}</p>
+      <p style="font-family:Arial,sans-serif;font-size:0.65em;font-weight:700;color:#1E5FA8;text-transform:uppercase;letter-spacing:0.1em;margin:0 0 14px 0;">${titleV}</p>
       <div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:14px;padding-bottom:14px;border-bottom:1.5px solid #e8f0f8;">
         <div style="flex-shrink:0;padding-right:16px;padding-bottom:4px;">${piranusaImg}</div>
         <div style="border-left:1px solid #d1d5db;padding-left:16px;padding-bottom:4px;">
-          <p style="font-family:Arial,sans-serif;font-size:10px;color:#cbd5e1;margin:2px 0 0 0;">PT. Piranti Nusantara Teknologi</p>
+          <p style="font-family:Arial,sans-serif;font-size:0.625em;color:#cbd5e1;margin:2px 0 0 0;">PT. Piranti Nusantara Teknologi</p>
         </div>
       </div>
-      <table cellpadding="0" cellspacing="0" border="0" style="margin-bottom:${productCount>0?'12':'0'}px;max-width:100%;">${contactRows}</table>
+      <table cellpadding="0" cellspacing="0" border="0" style="margin-bottom:${productCount>0?'12':'0'}px;max-width:100%;font-size:0.78em;">${contactRows}</table>
       ${logoStrip}
+      ${banners}
+      ${disc}
     </div>
   </div>
-  ${banners}
-  ${disc}
 </div>`;
 }
 
@@ -434,45 +457,45 @@ function buildExecutive(name, titleV, phone, email, website, address, products, 
   const productCount = products.length;
   const piranusaSrc = LOGO_DATA['piranusa'];
   const piranusaImg = piranusaSrc
-    ? `<img src="${piranusaSrc}" alt="PIRANUSA" height="28" style="display:block;height:28px;width:auto;border:0;outline:none;">`
-    : `<span style="font-family:Arial,sans-serif;font-size:15px;font-weight:900;color:white;">PIRANUSA</span>`;
+    ? `<img src="${piranusaSrc}" alt="PIRANUSA" height="34" style="display:block;height:2.125em;width:auto;max-width:140px;border:0;outline:none;">`
+    : `<span style="font-family:Arial,sans-serif;font-size:1.125em;font-weight:900;color:white;">PIRANUSA</span>`;
 
   const contactRows = [
-    phone   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_PHONE)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${phone}</span></td></tr></table></td></tr>` : '',
-    email   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_MAIL)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${email}</span></td></tr></table></td></tr>` : '',
-    website ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_WEB)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${website}</span></td></tr></table></td></tr>` : '',
-    address ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:top;padding-top:2px;width:22px;text-align:center;">${iconImg(ICON_LOC,'top')}</td><td style="word-break:break-word;overflow-wrap:break-word;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${address}</span></td></tr></table></td></tr>` : '',
+    phone   ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:0.78em;">${iconImg(ICON_PHONE)} <span style="color:#374151;">${phone}</span></span></td></tr>` : '',
+    email   ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:0.78em;">${iconImg(ICON_MAIL)} <span style="color:#374151;">${email}</span></span></td></tr>` : '',
+    website ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:0.78em;">${iconImg(ICON_WEB)} <span style="color:#374151;">${website}</span></span></td></tr>` : '',
+    address ? `<tr><td style="padding:4px 0;"><span style="font-family:Arial,sans-serif;font-size:0.78em;color:#374151;">${address}</span></td></tr>` : '',
   ].filter(Boolean).join('');
 
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
-    if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;font-family:Arial,sans-serif;font-size:9px;font-weight:700;color:#1E5FA8;border:1px solid #bfdbfe;padding:2px 7px;border-radius:3px;white-space:nowrap;background:#eff6ff;">${p.label}</span>`;
-    return `<span style="display:inline-block;line-height:0;margin:0 8px 6px 0;"><img src="${src}" alt="${p.label}" height="15" style="display:block;height:15px;width:auto;max-width:70px;object-fit:contain;border:0;outline:none;"></span>`;
+    if (!src) return `<span style="display:inline-block;vertical-align:middle;padding:0 8px 6px 0;"><span style="font-family:Arial,sans-serif;font-size:0.5625em;font-weight:700;color:#1E5FA8;border:1px solid #bfdbfe;padding:2px 7px;border-radius:3px;white-space:nowrap;background:#eff6ff;">${p.label}</span></span>`;
+    return `<span style="display:inline-block;vertical-align:middle;padding:0 8px 6px 0;"><span style="display:inline-block;background:#ffffff;border-radius:3px;padding:2px 4px;"><img src="${src}" alt="${p.label}" height="20" style="display:block;height:1em;width:auto;border:0;outline:none;"></span></span>`;
   }).join('');
 
   const logoStrip = productCount > 0
-    ? `<div style="padding:12px 20px 8px;border-top:1px solid #f0f4f8;box-sizing:border-box;background-color:#ffffff;margin-bottom:-6px;line-height:1;">${logoItems}</div>`
+    ? `<div style="padding:12px 20px 8px;border-top:1px solid #f0f4f8;max-width:100%;line-height:2.2em;background-color:#ffffff;">${logoItems}</div>`
     : '';
   const disc = showDisc ? buildDisclaimer('executive') : '';
   const banners = buildEventBannersHTML(eventBanners);
 
-  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;border-radius:6px;border:1px solid #e2e8f0;" data-sig-width="responsive" data-product-count="${productCount}">
+  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;border-radius:6px;border:1px solid #e2e8f0;font-size:20px;background-color:#ffffff;" data-sig-width="responsive" data-product-count="${productCount}">
   <div style="background:linear-gradient(135deg,#0a1f44 0%,#1E5FA8 60%,#2d7dd2 100%);padding:18px 20px 16px;box-sizing:border-box;border-radius:6px 6px 0 0;">
-    <p style="font-family:Arial,sans-serif;font-size:16px;font-weight:800;color:#ffffff;margin:0 0 2px 0;letter-spacing:-0.3px;">${name}</p>
-    <p style="font-family:Arial,sans-serif;font-size:10px;font-weight:600;color:#93c5fd;text-transform:uppercase;letter-spacing:0.14em;margin:0;">${titleV}</p>
+    <p style="font-family:Arial,sans-serif;font-size:1.3em;font-weight:800;color:#ffffff;margin:0 0 2px 0;letter-spacing:-0.3px;">${name}</p>
+    <p style="font-family:Arial,sans-serif;font-size:0.625em;font-weight:600;color:#93c5fd;text-transform:uppercase;letter-spacing:0.14em;margin:0;">${titleV}</p>
   </div>
   <div style="height:3px;background:linear-gradient(90deg,#38bdf8 0%,#1E5FA8 50%,#0a1f44 100%);"></div>
   <div style="padding:16px 20px 14px;background-color:#ffffff;box-sizing:border-box;">
     <div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #f0f4f8;">
       <div style="flex-shrink:0;padding-right:16px;padding-bottom:4px;">${piranusaImg}</div>
       <div style="border-left:1px solid #e2e8f0;padding-left:16px;padding-bottom:4px;">
-        <p style="font-family:Arial,sans-serif;font-size:10px;color:#cbd5e1;margin:2px 0 0 0;">PT. Piranti Nusantara Teknologi</p>
+        <p style="font-family:Arial,sans-serif;font-size:0.625em;color:#cbd5e1;margin:2px 0 0 0;">PT. Piranti Nusantara Teknologi</p>
       </div>
     </div>
-    <table cellpadding="0" cellspacing="0" border="0" style="max-width:100%;">${contactRows}</table>
+    <table cellpadding="0" cellspacing="0" border="0" style="max-width:100%;font-size:0.78em;">${contactRows}</table>
   </div>
   ${logoStrip}
-  ${banners ? `<div style="padding:0 20px 14px;box-sizing:border-box;background-color:#ffffff;">${banners}</div>` : ''}
+  ${banners ? `<div style="padding:0 20px 14px;box-sizing:border-box;background-color:#ffffff;font-size:0.78em;">${banners}</div>` : ''}
   ${disc}
 </div>`;
 }
@@ -481,39 +504,36 @@ function buildMinimal(name, titleV, phone, email, website, address, products, sh
   const productCount = products.length;
   const piranusaSrc = LOGO_DATA['piranusa'];
   const piranusaImg = piranusaSrc
-    ? `<img src="${piranusaSrc}" alt="PIRANUSA" height="22" style="display:block;height:22px;width:auto;border:0;outline:none;">`
-    : `<span style="font-family:Arial,sans-serif;font-size:13px;font-weight:900;color:#1E5FA8;">PIRANUSA</span>`;
+    ? `<img src="${piranusaSrc}" alt="PIRANUSA" height="28" style="display:block;height:1.75em;width:auto;max-width:120px;border:0;outline:none;">`
+    : `<span style="font-family:Arial,sans-serif;font-size:0.9375em;font-weight:900;color:#1E5FA8;">PIRANUSA</span>`;
 
   const contactLine = [
-    phone   ? `<span style="font-family:Arial,sans-serif;font-size:12px;color:#64748b;">${phone}</span>` : '',
-    email   ? `<span style="font-family:Arial,sans-serif;font-size:12px;color:#1E5FA8;">${email}</span>` : '',
-    website ? `<span style="font-family:Arial,sans-serif;font-size:12px;color:#1E5FA8;">${website}</span>` : '',
-  ].filter(Boolean).join(`<span style="color:#cbd5e1;margin:0 8px;font-size:12px;">·</span>`);
+    phone   ? `<span style="font-family:Arial,sans-serif;font-size:0.75em;color:#64748b;">${phone}</span>` : '',
+    email   ? `<span style="font-family:Arial,sans-serif;font-size:0.75em;color:#1E5FA8;">${email}</span>` : '',
+    website ? `<span style="font-family:Arial,sans-serif;font-size:0.75em;color:#1E5FA8;">${website}</span>` : '',
+  ].filter(Boolean).join(`<span style="color:#cbd5e1;margin:0 8px;font-size:0.75em;">|</span>`);
 
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
-    if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;font-family:Arial,sans-serif;font-size:9px;font-weight:700;color:#64748b;border:1px solid #e2e8f0;padding:2px 7px;border-radius:99px;white-space:nowrap;background:#f8fafc;">${p.label}</span>`;
-    return `<span style="display:inline-block;line-height:0;margin:0 8px 6px 0;opacity:0.85;"><img src="${src}" alt="${p.label}" height="14" style="display:block;height:14px;width:auto;max-width:65px;object-fit:contain;border:0;outline:none;"></span>`;
+    if (!src) return `<span style="display:inline-block;vertical-align:middle;padding:0 8px 6px 0;"><span style="font-family:Arial,sans-serif;font-size:0.5625em;font-weight:700;color:#64748b;border:1px solid #e2e8f0;padding:2px 7px;border-radius:99px;white-space:nowrap;background:#f8fafc;">${p.label}</span></span>`;
+    return `<span style="display:inline-block;vertical-align:middle;padding:0 8px 6px 0;"><span style="display:inline-block;background:#ffffff;border-radius:3px;padding:2px 4px;"><img src="${src}" alt="${p.label}" height="16" style="display:block;height:0.8em;width:auto;border:0;outline:none;opacity:0.85;"></span></span>`;
   }).join('');
 
   const logoStrip = productCount > 0
-    ? `<div style="padding-top:10px;margin-top:12px;border-top:1px solid #f1f5f9;margin-bottom:-6px;line-height:1;">${logoItems}</div>`
+    ? `<div style="padding-top:10px;margin-top:12px;border-top:1px solid #f1f5f9;max-width:100%;line-height:2em;">${logoItems}</div>`
     : '';
   const disc = showDisc ? buildDisclaimer('minimal') : '';
   const banners = buildEventBannersHTML(eventBanners);
 
-  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);border-radius:6px;padding:20px 22px 18px;border:1px solid #e2e8f0;" data-sig-width="responsive" data-product-count="${productCount}">
-  <p style="font-family:Arial,sans-serif;font-size:15px;font-weight:800;color:#0f172a;margin:0 0 2px 0;letter-spacing:-0.3px;">${name}</p>
+  return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;background-color:#ffffff;border-radius:6px;padding:20px 22px 18px;border:1px solid #e2e8f0;font-size:20px;" data-sig-width="responsive" data-product-count="${productCount}">
+  <p style="font-family:Arial,sans-serif;font-size:1.25em;font-weight:800;color:#0f172a;margin:0 0 2px 0;letter-spacing:-0.3px;">${name}</p>
   <div style="height:2px;background:linear-gradient(90deg,#1E5FA8 0%,#38bdf8 60%,transparent 100%);margin-bottom:6px;border-radius:2px;max-width:180px;"></div>
-  <p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#1E5FA8;text-transform:uppercase;letter-spacing:0.12em;margin:0 0 14px 0;">${titleV}</p>
+  <p style="font-family:Arial,sans-serif;font-size:0.625em;font-weight:700;color:#1E5FA8;text-transform:uppercase;letter-spacing:0.12em;margin:0 0 14px 0;">${titleV}</p>
   <div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #e2e8f0;">
     <div style="padding-right:14px;padding-bottom:4px;">${piranusaImg}</div>
 </div>
-  ${contactLine ? `<div style="margin-bottom:${address?'6':'0'}px;">${contactLine}</div>` : ''}
-  ${address ? `<div style="display:flex;align-items:flex-start;">
-    <span style="padding-right:6px;flex-shrink:0;">${iconImg(ICON_LOC,'top')}</span>
-    <span style="font-family:Arial,sans-serif;font-size:12px;color:#64748b;">${address}</span>
-  </div>` : ''}
+  ${contactLine ? `<div style="margin-bottom:${address?'6':'0'}px;font-size:0.75em;">${contactLine}</div>` : ''}
+  ${address ? `<div style="margin-top:6px;"><span style="font-family:Arial,sans-serif;font-size:0.75em;color:#64748b;">${address}</span></div>` : ''}
   ${logoStrip}
   ${banners}
   ${disc}
@@ -535,7 +555,7 @@ function buildSignatureHTML() {
   if (currentStyle === 'executive') sig = buildExecutive(name, titleV, phone, email, website, address, products, showDisc, eventBanners);
   else if (currentStyle === 'minimal') sig = buildMinimal(name, titleV, phone, email, website, address, products, showDisc, eventBanners);
   else sig = buildClassic(name, titleV, phone, email, website, address, products, showDisc, eventBanners);
-  return `<table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#ffffff" style="border-collapse:collapse;max-width:600px;background-color:#ffffff;"><tr><td bgcolor="#ffffff" style="background-color:#ffffff;padding:0;">${sig}</td></tr></table>`;
+  return `<table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#ffffff" style="border-collapse:collapse;max-width:100%;width:100%;background-color:#ffffff;"><tr><td bgcolor="#ffffff" style="background-color:#ffffff;padding:0;font-size:16px;">${sig}</td></tr></table>`;
 }
 
 function updatePreview() {
