@@ -389,8 +389,8 @@ function buildClassic(name, titleV, phone, email, website, address, products, sh
   const productCount = products.length;
   const piranusaSrc = LOGO_DATA['piranusa'];
   const piranusaImg = piranusaSrc
-    ? `<img src="${piranusaSrc}" alt="PIRANUSA" height="44" style="display:block;height:44px;width:auto;border:0;outline:none;">`
-    : `<span style="font-family:Arial,sans-serif;font-size:20px;font-weight:900;color:#1E5FA8;">PIRANUSA</span>`;
+    ? `<img src="${piranusaSrc}" alt="PIRANUSA" height="32" style="display:block;height:32px;width:auto;border:0;outline:none;">`
+    : `<span style="font-family:Arial,sans-serif;font-size:16px;font-weight:900;color:#1E5FA8;">PIRANUSA</span>`;
 
   const contactRows = [
     phone   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_PHONE)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#4b5563;">${phone}</span></td></tr></table></td></tr>` : '',
@@ -402,7 +402,7 @@ function buildClassic(name, titleV, phone, email, website, address, products, sh
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
     if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 12px 8px 0;font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#1E5FA8;border:1.5px solid #1E5FA8;padding:3px 7px;border-radius:3px;white-space:nowrap;">${p.label}</span>`;
-    return `<span style="display:inline-block;line-height:0;margin:0 12px 8px 0;"><img src="${src}" alt="${p.label}" height="22" style="display:block;height:22px;width:auto;max-width:90px;object-fit:contain;border:0;outline:none;"></span>`;
+    return `<span style="display:inline-block;line-height:0;margin:0 10px 8px 0;"><img src="${src}" alt="${p.label}" height="16" style="display:block;height:16px;width:auto;max-width:70px;object-fit:contain;border:0;outline:none;"></span>`;
   }).join('');
 
   const logoStrip = productCount > 0 ? `<div style="padding-top:12px;margin-top:2px;border-top:1px solid #f0f4f8;margin-bottom:-8px;line-height:1;">${logoItems}</div>` : '';
@@ -413,8 +413,8 @@ function buildClassic(name, titleV, phone, email, website, address, products, sh
   <div style="display:flex;max-width:100%;box-sizing:border-box;">
     <div style="width:5px;min-width:5px;background:linear-gradient(180deg,#1E5FA8 0%,#38bdf8 100%);border-radius:4px;flex-shrink:0;margin-right:18px;"></div>
     <div style="flex:1;min-width:0;padding:2px 0;">
-      <p style="font-family:Arial,sans-serif;font-size:21px;font-weight:800;color:#0f172a;margin:0 0 1px 0;letter-spacing:-0.3px;">${name}</p>
-      <p style="font-family:Arial,sans-serif;font-size:10.5px;font-weight:700;color:#1E5FA8;text-transform:uppercase;letter-spacing:0.1em;margin:0 0 14px 0;">${titleV}</p>
+      <p style="font-family:Arial,sans-serif;font-size:16px;font-weight:800;color:#0f172a;margin:0 0 1px 0;letter-spacing:-0.3px;">${name}</p>
+      <p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#1E5FA8;text-transform:uppercase;letter-spacing:0.1em;margin:0 0 12px 0;">${titleV}</p>
       <div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:14px;padding-bottom:14px;border-bottom:1.5px solid #e8f0f8;">
         <div style="flex-shrink:0;padding-right:16px;padding-bottom:4px;">${piranusaImg}</div>
         <div style="border-left:1px solid #d1d5db;padding-left:16px;padding-bottom:4px;">
@@ -434,8 +434,8 @@ function buildExecutive(name, titleV, phone, email, website, address, products, 
   const productCount = products.length;
   const piranusaSrc = LOGO_DATA['piranusa'];
   const piranusaImg = piranusaSrc
-    ? `<img src="${piranusaSrc}" alt="PIRANUSA" height="38" style="display:block;height:38px;width:auto;border:0;outline:none;">`
-    : `<span style="font-family:Arial,sans-serif;font-size:18px;font-weight:900;color:white;">PIRANUSA</span>`;
+    ? `<img src="${piranusaSrc}" alt="PIRANUSA" height="28" style="display:block;height:28px;width:auto;border:0;outline:none;">`
+    : `<span style="font-family:Arial,sans-serif;font-size:15px;font-weight:900;color:white;">PIRANUSA</span>`;
 
   const contactRows = [
     phone   ? `<tr><td style="padding:4px 0;"><table cellpadding="0" cellspacing="0" style="max-width:100%;"><tr><td style="padding-right:10px;vertical-align:middle;width:22px;text-align:center;">${iconImg(ICON_PHONE)}</td><td style="word-break:break-all;overflow-wrap:anywhere;"><span style="font-family:Arial,sans-serif;font-size:12.5px;color:#374151;">${phone}</span></td></tr></table></td></tr>` : '',
@@ -447,7 +447,7 @@ function buildExecutive(name, titleV, phone, email, website, address, products, 
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
     if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;font-family:Arial,sans-serif;font-size:9px;font-weight:700;color:#1E5FA8;border:1px solid #bfdbfe;padding:2px 7px;border-radius:3px;white-space:nowrap;background:#eff6ff;">${p.label}</span>`;
-    return `<span style="display:inline-block;line-height:0;margin:0 10px 6px 0;"><img src="${src}" alt="${p.label}" height="20" style="display:block;height:20px;width:auto;max-width:90px;object-fit:contain;border:0;outline:none;"></span>`;
+    return `<span style="display:inline-block;line-height:0;margin:0 8px 6px 0;"><img src="${src}" alt="${p.label}" height="15" style="display:block;height:15px;width:auto;max-width:70px;object-fit:contain;border:0;outline:none;"></span>`;
   }).join('');
 
   const logoStrip = productCount > 0
@@ -458,7 +458,7 @@ function buildExecutive(name, titleV, phone, email, website, address, products, 
 
   return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;border-radius:6px;border:1px solid #e2e8f0;" data-sig-width="responsive" data-product-count="${productCount}">
   <div style="background:linear-gradient(135deg,#0a1f44 0%,#1E5FA8 60%,#2d7dd2 100%);padding:18px 20px 16px;box-sizing:border-box;border-radius:6px 6px 0 0;">
-    <p style="font-family:Arial,sans-serif;font-size:21px;font-weight:800;color:#ffffff;margin:0 0 2px 0;letter-spacing:-0.3px;">${name}</p>
+    <p style="font-family:Arial,sans-serif;font-size:16px;font-weight:800;color:#ffffff;margin:0 0 2px 0;letter-spacing:-0.3px;">${name}</p>
     <p style="font-family:Arial,sans-serif;font-size:10px;font-weight:600;color:#93c5fd;text-transform:uppercase;letter-spacing:0.14em;margin:0;">${titleV}</p>
   </div>
   <div style="height:3px;background:linear-gradient(90deg,#38bdf8 0%,#1E5FA8 50%,#0a1f44 100%);"></div>
@@ -481,8 +481,8 @@ function buildMinimal(name, titleV, phone, email, website, address, products, sh
   const productCount = products.length;
   const piranusaSrc = LOGO_DATA['piranusa'];
   const piranusaImg = piranusaSrc
-    ? `<img src="${piranusaSrc}" alt="PIRANUSA" height="30" style="display:block;height:30px;width:auto;border:0;outline:none;">`
-    : `<span style="font-family:Arial,sans-serif;font-size:15px;font-weight:900;color:#1E5FA8;">PIRANUSA</span>`;
+    ? `<img src="${piranusaSrc}" alt="PIRANUSA" height="22" style="display:block;height:22px;width:auto;border:0;outline:none;">`
+    : `<span style="font-family:Arial,sans-serif;font-size:13px;font-weight:900;color:#1E5FA8;">PIRANUSA</span>`;
 
   const contactLine = [
     phone   ? `<span style="font-family:Arial,sans-serif;font-size:12px;color:#64748b;">${phone}</span>` : '',
@@ -493,7 +493,7 @@ function buildMinimal(name, titleV, phone, email, website, address, products, sh
   const logoItems = products.map(p => {
     const src = LOGO_DATA[p.id];
     if (!src) return `<span style="display:inline-flex;align-items:center;margin:0 10px 6px 0;font-family:Arial,sans-serif;font-size:9px;font-weight:700;color:#64748b;border:1px solid #e2e8f0;padding:2px 7px;border-radius:99px;white-space:nowrap;background:#f8fafc;">${p.label}</span>`;
-    return `<span style="display:inline-block;line-height:0;margin:0 10px 6px 0;opacity:0.85;"><img src="${src}" alt="${p.label}" height="18" style="display:block;height:18px;width:auto;max-width:80px;object-fit:contain;border:0;outline:none;"></span>`;
+    return `<span style="display:inline-block;line-height:0;margin:0 8px 6px 0;opacity:0.85;"><img src="${src}" alt="${p.label}" height="14" style="display:block;height:14px;width:auto;max-width:65px;object-fit:contain;border:0;outline:none;"></span>`;
   }).join('');
 
   const logoStrip = productCount > 0
@@ -503,7 +503,7 @@ function buildMinimal(name, titleV, phone, email, website, address, products, sh
   const banners = buildEventBannersHTML(eventBanners);
 
   return `<div style="font-family:Arial,sans-serif;max-width:100%;box-sizing:border-box;background:linear-gradient(135deg,#f8fafc 0%,#eff6ff 100%);border-radius:6px;padding:20px 22px 18px;border:1px solid #e2e8f0;" data-sig-width="responsive" data-product-count="${productCount}">
-  <p style="font-family:Arial,sans-serif;font-size:20px;font-weight:800;color:#0f172a;margin:0 0 2px 0;letter-spacing:-0.3px;">${name}</p>
+  <p style="font-family:Arial,sans-serif;font-size:15px;font-weight:800;color:#0f172a;margin:0 0 2px 0;letter-spacing:-0.3px;">${name}</p>
   <div style="height:2px;background:linear-gradient(90deg,#1E5FA8 0%,#38bdf8 60%,transparent 100%);margin-bottom:6px;border-radius:2px;max-width:180px;"></div>
   <p style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;color:#1E5FA8;text-transform:uppercase;letter-spacing:0.12em;margin:0 0 14px 0;">${titleV}</p>
   <div style="display:flex;align-items:center;flex-wrap:wrap;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #e2e8f0;">
